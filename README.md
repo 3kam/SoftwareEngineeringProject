@@ -8,7 +8,7 @@ CanteenEats is a Flask-based Progressive Web Application (PWA) designed to optim
 ---
 
 ## Problem Definition
-The SMSHS canteen services over 800 students daily, resulting in:
+The SMSHS canteen services **up to** 800 students daily, resulting in:
 - Long queue times during recess and lunch  
 - Inefficient order management for staff  
 - Reduced eating time for students  
