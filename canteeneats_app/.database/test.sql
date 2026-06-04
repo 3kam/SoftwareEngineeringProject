@@ -1,53 +1,73 @@
--- 1. CLEANUP REGISTRY
-DROP TABLE IF EXISTS Orders;
-DROP TABLE IF EXISTS CanteenItems;
-DROP TABLE IF EXISTS Users;
+-- Flush existing placeholder menu items to populate real school options
+DELETE FROM CanteenItems;
 
--- 2. CREATE SYSTEM TABLES
-CREATE TABLE Users (
-    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL,
-    role TEXT DEFAULT 'Student',
-    prepaid_balance REAL DEFAULT 0.00
-);
-
-CREATE TABLE CanteenItems (
-    item_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    item_name TEXT NOT NULL,
-    price REAL NOT NULL,
-    category TEXT NOT NULL,
-    is_vegetarian INTEGER DEFAULT 0,
-    stock_level INTEGER DEFAULT 0
-);
-
-CREATE TABLE Orders (
-    order_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    item_id INTEGER NOT NULL,
-    quantity INTEGER DEFAULT 1,
-    target_period TEXT NOT NULL,
-    status TEXT DEFAULT 'Received',
-    timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES Users(user_id),
-    FOREIGN KEY(item_id) REFERENCES CanteenItems(item_id)
-);
-
--- 3. INJECT TEST SEED RECORDS
-INSERT INTO Users (username, password_hash, role, prepaid_balance) VALUES 
-('student1@smshs.com', 'scrypt:32768:8:1$hash1', 'Student', 25.50),
-('student2@smshs.com', 'scrypt:32768:8:1$hash2', 'Student', 4.20),
-('kitchen_staff@smshs.com', 'scrypt:32768:8:1$hash3', 'Staff', 0.00),
-('admin_canteen@smshs.com', 'scrypt:32768:8:1$hash4', 'Admin', 100.00);
-
+-- INJECT SMSHS CANTEEN MENU DATA
 INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, stock_level) VALUES 
-('Veggie Burger', 5.50, 'Hot Food', 1, 12),
-('Chicken Schnitzel Roll', 6.50, 'Hot Food', 0, 8),
-('Large Salad Bowl', 4.80, 'Cold Food', 1, 5),
-('Chocolate Oak Milk', 3.50, 'Drinks', 0, 20),
-('Fresh Apple', 1.20, 'Snacks', 1, 15);
 
-INSERT INTO Orders (user_id, item_id, quantity, target_period, status) VALUES 
-(1, 1, 1, 'Recess', 'Preparing'),
-(1, 4, 1, 'Recess', 'Ready'),
-(2, 2, 1, 'Lunch', 'Received');
+-- 1. SANDWICHES & WRAPS
+('Cheese & Tomato Sandwich / Wrap', 5.00, 'Sandwiches & Wraps', 1, 15),
+('Ham & Cheese Sandwich / Wrap', 5.00, 'Sandwiches & Wraps', 0, 15),
+('Ham, Cheese & Tomato Sandwich / Wrap', 5.60, 'Sandwiches & Wraps', 0, 15),
+('Egg & Lettuce w/Mayo Sandwich / Wrap', 5.60, 'Sandwiches & Wraps', 1, 10),
+('Curried Egg & Lettuce w/Mayo Sandwich / Wrap', 5.60, 'Sandwiches & Wraps', 1, 10),
+('Sweet Chilli Chicken, Lettuce & Mayo Wrap', 7.80, 'Sandwiches & Wraps', 0, 20),
+('Chicken, Lettuce & Mayo Wrap', 7.80, 'Sandwiches & Wraps', 0, 20),
+('Avocado Salad Wrap', 8.30, 'Sandwiches & Wraps', 1, 12),
+('Chicken, Avocado & Lettuce Wrap', 8.30, 'Sandwiches & Wraps', 0, 15),
+('Chicken Caesar Wrap', 8.30, 'Sandwiches & Wraps', 0, 15),
+('Falafels w/Lettuce, Tomato & Aioli Wrap', 8.30, 'Sandwiches & Wraps', 1, 12),
+
+-- 2. SALADS
+('Garden Salad Bowl (GF)', 7.50, 'Salads', 1, 8),
+('Caesar Salad Bowl', 7.50, 'Salads', 1, 8),
+('Avocado Salad Bowl', 8.30, 'Salads', 1, 6),
+('Sweet Chilli Chicken Salad Bowl', 8.30, 'Salads', 0, 10),
+('Chicken Caesar Salad Bowl', 8.30, 'Salads', 0, 10),
+('Falafel Salad Bowl (GF)', 8.30, 'Salads', 1, 6),
+
+-- 3. PASTRIES
+('Sausage Roll', 5.00, 'Pastries', 0, 25),
+('Sausage Roll King', 6.60, 'Pastries', 0, 20),
+('Meat Pie Beef', 6.50, 'Pastries', 0, 25),
+('Pepper Steak Pie', 6.70, 'Pastries', 0, 15),
+('Spinach & Ricotta Roll', 6.90, 'Pastries', 1, 15),
+('Potato Pie Beef', 7.20, 'Pastries', 0, 12),
+
+-- 4. BURGERS
+('Chicken Burger (Lettuce & Mayo)', 6.40, 'Burgers', 0, 25),
+('Beef & Cheese Burger (Tomato Sauce)', 7.10, 'Burgers', 0, 20),
+('Aussie Burger (Beef, Veg, BBQ Sauce)', 7.10, 'Burgers', 0, 15),
+('Vege Burger (Falafels, Salad, Aioli)', 7.10, 'Burgers', 1, 12),
+('Hot & Spicy Chicken Stacker Burger', 8.50, 'Burgers', 0, 18),
+
+-- 5. HOT BITES & TOASTED ROLLS
+('Garlic Bread Loaf', 3.50, 'Hot Bites', 1, 15),
+('Chicken Nuggets (x6)', 6.30, 'Hot Bites', 0, 30),
+('Hot Dog (Tomato or BBQ Sauce)', 4.90, 'Hot Bites', 0, 20),
+('Potato Wedges Bowl', 5.70, 'Hot Bites', 1, 25),
+('Cup Of Noodles (Chicken/Beef/Mio Goreng)', 4.40, 'Hot Bites', 0, 40),
+('Doner Kebab Meat & Cheese', 8.50, 'Hot Bites', 0, 15),
+('Doner Kebab Meat & Salad', 9.50, 'Hot Bites', 0, 15),
+
+-- 6. RICE & PASTA
+('Butter Chicken & Rice (GF)', 8.10, 'Rice & Pasta', 0, 15),
+('Bolognese Pasta (Beef Sauce)', 8.10, 'Rice & Pasta', 0, 15),
+('Fettucine Carbonara Chicken', 8.10, 'Rice & Pasta', 0, 15),
+('Fried Rice (GF)', 8.10, 'Rice & Pasta', 1, 12),
+('Homemade Lasagna Large', 8.80, 'Rice & Pasta', 0, 10),
+
+-- 7. SNACKS
+('Popcorn (GF)', 1.70, 'Snacks', 1, 30),
+('Jelly Bowl (GF)', 1.70, 'Snacks', 1, 20),
+('Chocolate Mousse (GF)', 3.20, 'Snacks', 1, 15),
+('Homemade Muffin', 3.60, 'Snacks', 1, 15),
+('Banana Bread Slice', 3.20, 'Snacks', 1, 15),
+
+-- 8. DRINKS
+('Popper Juice', 2.90, 'Drinks', 1, 50),
+('Bottled Water', 3.10, 'Drinks', 1, 60),
+('Oak Milk Regular', 3.80, 'Drinks', 0, 40),
+('Oak Milk Large', 5.80, 'Drinks', 0, 30),
+('Ice Break Coffee', 6.90, 'Drinks', 0, 25),
+('Up N Go', 4.20, 'Drinks', 0, 35),
+('Soft Drink Can No Sugar', 3.70, 'Drinks', 1, 40);
