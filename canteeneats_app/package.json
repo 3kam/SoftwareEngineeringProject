@@ -1,0 +1,11 @@
+{
+  "name": "canteeneats_app",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.22.2",
+    "express-session": "^1.19.0",
+    "path": "^0.12.7",
+    "url": "^0.11.4"
+  }
+}
