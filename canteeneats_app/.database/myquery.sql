@@ -1,7 +1,49 @@
--- Flush existing placeholder menu items to populate real school options
-DELETE FROM CanteenItems;
+-- 1. CLEANUP REGISTRY (Drops existing tables so you always start fresh)
+DROP TABLE IF EXISTS Orders;
+DROP TABLE IF EXISTS CanteenItems;
+DROP TABLE IF EXISTS Users;
 
--- INJECT SMSHS CANTEEN MENU DATA
+-- 2. CREATE SYSTEM TABLES WITH YOUR NEW SCHEMA
+CREATE TABLE Users (
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    role TEXT DEFAULT 'Student',
+    prepaid_balance REAL DEFAULT 0.00
+);
+
+CREATE TABLE CanteenItems (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    item_name TEXT NOT NULL,
+    price REAL NOT NULL,
+    category TEXT NOT NULL,
+    is_vegetarian INTEGER DEFAULT 0,
+    is_gluten_free INTEGER DEFAULT 0,
+    is_everyday_items INTEGER DEFAULT 0,
+    is_occasional_items INTEGER DEFAULT 0,
+    stock_level INTEGER DEFAULT 50
+);
+
+CREATE TABLE Orders (
+    order_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    item_id INTEGER NOT NULL,
+    quantity INTEGER DEFAULT 1,
+    target_period TEXT NOT NULL,
+    status TEXT DEFAULT 'Received',
+    timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES Users(user_id),
+    FOREIGN KEY(item_id) REFERENCES CanteenItems(id)
+);
+
+-- 3. INJECT USER SEED RECORDS
+INSERT INTO Users (username, password_hash, role, prepaid_balance) VALUES 
+('student1@smshs.com', 'scrypt:32768:8:1$hash1', 'Student', 25.50),
+('student2@smshs.com', 'scrypt:32768:8:1$hash2', 'Student', 4.20),
+('kitchen_staff@smshs.com', 'scrypt:32768:8:1$hash3', 'Staff', 0.00),
+('admin_canteen@smshs.com', 'scrypt:32768:8:1$hash4', 'Admin', 100.00);
+
+-- 4. INJECT FULL SMSHS MENU DATA
 INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_free, is_everyday_items, is_occasional_items, stock_level) VALUES 
 
 -- 1. Sandwiches
@@ -19,7 +61,7 @@ INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_f
 ('Chicken & Salad', 6.00, 'Sandwiches', 0, 0, 1, 0, 50),
 ('Gluten Free Bread Add', 0.50, 'Sandwiches', 0, 1, 1, 0, 50),
 
--- 2. Wraps: half $4.00
+-- 2. Wraps
 ('Sweet Chilli Chicken, Lettuce & Mayo (Wrap)', 7.80, 'Wraps', 0, 0, 1, 0, 50),
 ('Salad (Wrap)', 7.80, 'Wraps', 1, 0, 1, 0, 50),
 ('Chicken, Lettuce & Mayo (Wrap)', 7.80, 'Wraps', 0, 0, 1, 0, 50),
@@ -29,7 +71,7 @@ INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_f
 ('Chicken, Avocado & Lettuce (Wrap)', 8.30, 'Wraps', 0, 0, 1, 0, 50),
 ('Chicken Caesar Salad (Wrap)', 8.30, 'Wraps', 0, 0, 1, 0, 50),
 ('Ham & Salad (Wrap)', 8.30, 'Wraps', 0, 0, 1, 0, 50),
-('Chicken & Salad', 8.30, 'Wraps', 0, 0, 1, 0, 50), -- Fixed category typo "Warps" -> "Wraps"
+('Chicken & Salad (Wrap)', 8.30, 'Wraps', 0, 0, 1, 0, 50),
 ('Falafel w/Lettuce, Tomato & Aioli (Wrap)', 8.30, 'Wraps', 0, 0, 1, 0, 50),
 ('Gluten Free Wrap Add', 0.50, 'Wraps', 0, 1, 1, 0, 50),
 
@@ -47,7 +89,7 @@ INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_f
 ('Hot Chocolate', 3.60, 'Drinks', 0, 0, 1, 0, 50),
 ('Soft Drink Can No Sugar', 3.70, 'Drinks', 0, 0, 0, 1, 50),
 
--- 4. Salads (All new 25% Larger)
+-- 4. Salads
 ('Garden', 7.50, 'Salads', 1, 1, 1, 0, 50),
 ('Caesar V', 7.50, 'Salads', 0, 0, 1, 0, 50),
 ('Avocado Salad', 8.30, 'Salads', 0, 0, 1, 0, 50),
@@ -74,12 +116,12 @@ INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_f
 ('Half Fried Rice', 5.80, 'Rice & Pasta', 1, 1, 1, 0, 50), 
 ('Homemade Lasagna Large', 8.80, 'Rice & Pasta', 0, 0, 1, 0, 50),
 
--- 7. Sushi Rolls (Gluten Free)
+-- 7. Sushi Rolls
 ('Tuna & Cucumber', 5.40, 'Sushi', 0, 1, 1, 0, 50), 
 ('Chicken & Avocado', 5.40, 'Sushi', 0, 1, 1, 0, 50),
 ('Vegetarian', 5.40, 'Sushi', 0, 1, 1, 0, 50),
 
--- 8. Breakfast (Before 9am)
+-- 8. Breakfast
 ('Seasonal Fruit Pieces', 2.20, 'Breakfast', 0, 0, 1, 0, 50),
 ('Watermelon Bowl', 6.70, 'Breakfast', 0, 0, 1, 0, 50),
 ('Fruit Salad Bowl', 7.30, 'Breakfast', 0, 0, 1, 0, 50),
@@ -104,12 +146,11 @@ INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_f
 ('Banana Bread', 3.60, 'Snacks', 0, 0, 1, 0, 50),
 ('Piranha Rice Snaps', 3.60, 'Snacks', 0, 1, 1, 0, 50),
 ('Homemade Muffin', 5.40, 'Snacks', 0, 0, 1, 0, 50),
-('Sour Snap Stix', 1.70, 'Snacks', 0, 1, 1 ,0, 50),
+('Sour Snap Stix', 1.70, 'Snacks', 0, 1, 1, 0, 50),
 ('Frozen Juice Cup', 2.40, 'Snacks', 0, 1, 1, 0, 50),
--- Extras as part of snacks
-('Sauce or Dressing Portions', 0.60, 'Snacks', 0, 0, 0, 0, 50), -- Added comma
-('Sour Cream - Gravy - Cheese', 1.10, 'Snacks', 0, 0, 0, 0, 50), -- Added comma
-('Utensils', 0.30, 'Snacks', 0, 0, 0, 0, 50), -- Added comma
+('Sauce or Dressing Portions', 0.60, 'Snacks', 0, 0, 0, 0, 50),
+('Sour Cream - Gravy - Cheese', 1.10, 'Snacks', 0, 0, 0, 0, 50),
+('Utensils', 0.30, 'Snacks', 0, 0, 0, 0, 50),
 
 -- 11. Loaded Subs
 ('BBQ Chicken, Cheese & Sauce Sub', 6.50, 'Loaded Subs', 0, 0, 1, 0, 50),
@@ -145,5 +186,11 @@ INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_f
 ('Hot & Spicy Chicken Stacker Burger', 8.50, 'Burgers', 0, 0, 1, 0, 50),
 
 -- 16. Doner Kebabs
-('Doner Kebab Meat & Cheese', 8.50, 'Doner Kebabs', 0, 0, 1, 0, 50), -- Added missing comma between 0 and 1
+('Doner Kebab Meat & Cheese', 8.50, 'Doner Kebabs', 0, 0, 1, 0, 50),
 ('Doner Kebab Meat & Salad', 9.50, 'Doner Kebabs', 0, 0, 1, 0, 50);
+
+-- 5. INJECT ACTIVE RECREATIONAL TEST ORDERS
+INSERT INTO Orders (user_id, item_id, quantity, target_period, status) VALUES 
+(1, 1, 1, 'Recess', 'Preparing'),
+(1, 4, 1, 'Recess', 'Ready'),
+(2, 2, 1, 'Lunch', 'Received');

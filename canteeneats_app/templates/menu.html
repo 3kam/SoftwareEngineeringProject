@@ -12,17 +12,71 @@
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
+    background-color: #f9f9f9;
 }
-/* side navigation */
-.sidenav {
-    height: 100%;
-    width: 200px;
-    position: fixed; /* Added colon */
-    z-index: 1;      /* Added semicolon */
+
+/* 1. TOP HEADER BAR (Spans full width across the very top) */
+.header {
+    height: 60px;
+    width: 100%; 
+    position: fixed;
     top: 0;
     left: 0;
-    background-color: #111;
-    overflow-x: hidden; /* Fixed spelling */
+    background-color: #111111; /* Changed to dark to match a unified theme, or keep #fff */
+    color: #EFE6D2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    padding: 0 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 3; /* Highest priority layer */
+}
+
+/* Header Action Buttons Container */
+.header-actions {
+    display: flex;
+    gap: 15px;
+}
+
+/* Button Styling */
+.btn {
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.btn-edit {
+    background-color: #EFE6D2;
+    color: #111;
+    border: 1px solid #ccc;
+}
+
+.btn-edit:hover {
+    background-color: #dcd3be;
+}
+
+.btn-logout {
+    background-color: #d9534f; 
+    color: white;
+}
+
+.btn-logout:hover {
+    background-color: #c9302c;
+}
+
+/* 2. SIDE NAVIGATION (Starts BELOW the 60px header) */
+.sidenav {
+    height: calc(100% - 60px); /* Spans remaining viewport height */
+    width: 200px;
+    position: fixed; 
+    top: 60px; /* Pushed down exactly by the header's height */
+    left: 0;
+    background-color: #222222; /* Slightly different dark shade for depth */
+    overflow-x: hidden; 
+    z-index: 2;
 }
 
 /* Side navigation links */
@@ -31,30 +85,45 @@ body {
     padding: 16px;
     text-decoration: none;
     display: block;
+    border-bottom: 1px solid #333; /* Clean separator line */
 }
+
 /* Change color when hovering */
 .sidenav a:hover {
     background-color: #EFE6D2;
     color: black;
 }
 
-/* style content */
+/* 3. MAIN CONTENT AREA (Pushed right and down to frame perfectly) */
 .content {
-    margin-left: 200px;
-    padding-left: 20px;
+    margin-left: 200px; /* Shifts right past the sidebar width */
+    margin-top: 60px;   /* Shifts down past the top header height */
+    padding: 30px;
 }
 </style>
 </head>
 <body>
-    <!-- Changed class from "menu" to "sidenav" to match CSS -->
+
+    <!-- TOP HEADER SYSTEM BAR -->
+    <div class="header">
+        <h3>SMSHS Canteen Hub</h3>
+        <div class="header-actions">
+            <a href="edit_account.html" class="btn btn-edit">Edit Account</a>
+            <a href="/logout" class="btn btn-logout">Log Out</a>
+        </div>
+    </div>
+
+    <!-- SIDE NAVIGATION TREE -->
     <div class="sidenav">
-        <a href="register.html">Sign Up</a>
+        <a href="signup.html">Sign Up</a> 
         <a href="login.html">Log in</a>
     </div>
 
+    <!-- PERSISTENT APP VIEWPORT -->
     <div class="content">
-        <h2>Menu</h2>
+        <h2>Menu Options</h2>
         <p>This is currently in a test mode as of now.</p>
     </div>
+
 </body>
 </html>
