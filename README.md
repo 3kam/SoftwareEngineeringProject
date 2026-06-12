@@ -3,32 +3,32 @@
 ---
 
 ## Project Overview
-CanteenEats is a Flask-based Progressive Web Application (PWA) designed to optimise the ordering process at St Marys Senior High School (SMSHS). The system removes physical queue congestion by enabling students to pre-order meals, manage prepaid credit, and track order status in real time.
+CanteenEats is a Node.js-based Progressive Web Application (PWA) built using the Express framework. It is designed to optimise the food ordering process at St Marys Senior High School (SMSHS). The system removes physical queue congestion by enabling students to pre-order meals, manage prepaid credit, and track order status in real time.
 
 ---
 
 ## Problem Definition
-The SMSHS canteen services **up to** 800 students daily, resulting in:
+The SMSHS canteen services up to 800 students daily, resulting in:
 - Long queue times during recess and lunch  
 - Inefficient order management for staff  
 - Reduced eating time for students  
 
-This system addresses these issues through automation and real-time tracking.
+This system addresses these issues through automation, digital balancing systems, and real-time order tracking.
 
 ---
 
 ## Objectives
-- Reduce physical queue congestion  
-- Provide real-time order tracking  
-- Improve staff workflow efficiency  
-- Implement secure prepaid account management  
+- Reduce physical queue congestion outside the canteen windows  
+- Provide transparent real-time order tracking for students  
+- Improve staff kitchen workflow efficiency through digital dashboards  
+- Implement secure prepaid account management to minimize cash handling  
 
 ---
 
 ## Target Users
-- **Students** – Place and track orders  
-- **Staff** – Manage menu and orders  
-- **Admin** – Manage users and system configuration  
+- **Students** – Place and track personal orders  
+- **Staff** – Manage menu item states and update cooking queues  
+- **Admin** – Manage user accounts, balances, and system configuration  
 
 ---
 
@@ -36,19 +36,19 @@ This system addresses these issues through automation and real-time tracking.
 
 ### Student Features
 - Browse live menu with filters (price, dietary requirements, availability)  
-- Place orders using prepaid credit  
-- Select pickup time (Recess or Lunch)  
-- Track order status (Received → Preparing → Ready)  
-- View order history  
-- Manage account details  
+- Place orders using prepaid account credit  
+- Select specific pickup windows (Recess or Lunch)  
+- Track order status in real time (Received → Preparing → Ready)  
+- View personal order history logs  
+- Manage account security details  
 
 ### Staff Features
-- Add, edit, and delete menu items (including images)  
-- View and update order statuses  
-- Cancel orders and issue refunds  
-- Promote users to staff roles  
-- Top up student credit  
-- Access dashboard with active orders  
+- Add, edit, and toggle menu items (including image paths)  
+- View and update order processing statuses  
+- Cancel incoming orders and issue immediate account balance refunds  
+- Promote basic user accounts to staff access roles  
+- Top up student prepaid credit balances manually  
+- Access an active preparation dashboard  
 
 ---
 
@@ -56,50 +56,56 @@ This system addresses these issues through automation and real-time tracking.
 
 ### Input–Process–Output Model
 
-**Input**
-- User login credentials  
-- Menu selections  
-- Filter preferences  
-- Payment authorisation  
+#### Input
+- User login credentials (Username/Password matching blocks)  
+- Menu selections and custom parameters  
+- Filter and sorting preferences  
+- Checkout and payment balance authorizations  
 
-**Process**
-- Role-based authentication (RBAC)  
-- Balance validation  
-- Order verification and stock checks  
-- Database updates  
+#### Process
+- Role-based access control (RBAC) verification via session middleware  
+- Credit account balance validation  
+- Order verification and ingredient/stock checks  
+- Relational database updates via SQL queries  
 
-**Output**
-- Order confirmation  
-- Updated account balance  
-- Real-time order status  
-- Staff preparation queue  
+#### Output
+- Live order confirmation signals  
+- Dynamically updated user account balance records  
+- Real-time order status tracking elements  
+- Aggregated staff preparation queues  
 
 ---
 
 ## Technical Stack
-- **Backend:** Flask (Python)  
-- **Database:** SQLite (SQL)  
-- **Frontend:** HTML, CSS, JavaScript  
-- **Version Control:** Git  
+- **Backend Runtime Environment:** Node.js (JavaScript)  
+- **Server Framework:** Express (v5.x)  
+- **Database Engine:** SQLite (Relational SQL file)  
+- **Frontend Architecture:** Clean HTML, CSS, JavaScript (PWA Service Workers for offline shells)  
+- **Version Control System:** Git (GitHub Codespaces cloud deployment configuration)  
 
-### Security
-- Password hashing  
-- CSRF protection  
-- Session management  
+### Security Layers
+- Production-ready password hashing  
+- Session-state isolation using explicit middleware  
+- Route protection checking parameters across user role flags  
 
 ---
 
 ## Non-Functional Requirements
-- **Security:** Prevent unauthorised access and data breaches  
-- **Performance:** Handle concurrent users during peak times  
-- **Usability:** Fast and intuitive interface  
-- **Reliability:** Stable operation during school hours  
+- **Security:** Strict data separation ensuring users cannot interact with other profiles  
+- **Performance:** Fast response boundaries to support bulk connections during school bells  
+- **Usability:** High-contrast layout designed for quick smartphone use while on school grounds  
+- **Reliability:** Persistent local file storage handling sudden disconnections without dropping active cart state  
 
 ---
 
-## Installation
+## Installation & Deployment
 
 ```bash
-pip install -r requirements.txt
-python init_db.py
-flask run
+# Navigate to your application root directory
+cd canteeneats_app
+
+# Install required backend dependencies
+npm install
+
+# Launch the server instance
+node index.js
