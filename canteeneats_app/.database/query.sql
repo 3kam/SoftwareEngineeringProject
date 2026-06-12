@@ -107,9 +107,9 @@ INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_f
 ('Sour Snap Stix', 1.70, 'Snacks', 0, 1, 1 ,0, 50),
 ('Frozen Juice Cup', 2.40, 'Snacks', 0, 1, 1, 0, 50),
 -- Extras as part of snacks
-('Sauce or Dressing Portions', 0.60, 'Snacks', 0, 0, 0, 0, 50)
-('Sour Cream - Gravy - Cheese', 1.10, 'Snacks', 0, 0, 0, 0, 50)
-('Utensils', 0.30, 'Snacks', 0, 0, 0, 0, 50)
+('Sauce or Dressing Portions', 0.60, 'Snacks', 0, 0, 0, 0, 50),
+('Sour Cream - Gravy - Cheese', 1.10, 'Snacks', 0, 0, 0, 0, 50),
+('Utensils', 0.30, 'Snacks', 0, 0, 0, 0, 50),
 
 -- 11. Loaded Subs
 ('BBQ Chicken, Cheese & Sauce Sub', 6.50, 'Loaded Subs', 0, 0, 1, 0, 50),

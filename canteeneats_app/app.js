@@ -36,7 +36,7 @@ app.post("/auth/register", async (req, res) => {
     users.push(newUser);
 
     console.log("--- USER REGISTERED SECURELY ---");
-    console.log("Plain Text Password:", password);
+    console.log("Plain Text Password:", hashedPassword);
     console.log("Hashed Password saved:", hashedPassword);
     console.log("--------------------------------\n");
 
