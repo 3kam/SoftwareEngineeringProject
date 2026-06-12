@@ -17,7 +17,7 @@ def execute_production_database_backup():
 
     # Copy the database file cleanly while preserving system metadata
     shutil.copy2(primary_database_file, full_destination_path)
-    print(f"[BACKUP SUCCESSFULL] File created at: {full_destination_pat h}")
+    print(f"[BACKUP SUCCESSFULL] File created at: {full_destination_pat}")
 
 if __name__ == "__main__":
     execute_production_database_backup()
