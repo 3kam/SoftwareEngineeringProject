@@ -1,0 +1,28 @@
+<body>
+    <a href="/">
+        <button type="button">Back</button>
+    </a> 
+    
+    <div class="form-container">
+        <div class="form-header">
+            <h3>Sign Up</h3>
+        </div>
+        
+        <form action="/auth/register" method="POST">
+            <div class="input-container">
+                <input type="text" name="username" placeholder="Username" required> 
+                <input type="email" name="email" placeholder="Email Address" required> 
+                <input type="password" name="password" placeholder="Create Password" required>
+                <input type="password" placeholder="Re-Enter password" required>     
+                
+                <div class="button-box">
+                    <button class="submit" type="submit">SIGN UP</button> 
+                </div>  
+            </div>
+        </form>
+        
+        <div class="signup">
+             Already Have An Account? <a href="/login">Log In</a>  
+        </div>
+    </div>
+</body>

@@ -2,76 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Essential mobile scaling viewports for PWA touch UI compliance -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#2c3e50">
-    <title>{% block title %}CanteenEats - SMSHS{% endblock %}</title>
-    
-    <!-- Link to PWA Application Launcher Properties -->
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
-    
-    <!-- Global CSS Layout Frame -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
-    <!-- iOS Native Overlay Optimizations -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="CanteenEats">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CanteenEats</title>
 </head>
 <body>
-
-    <!-- Real-time Network Failure Banner Managed by ui.js -->
-    <div id="offline-banner" style="display: none; background: #0a6102; color: white; padding: 12px; text-align: center; position: sticky; top: 0; z-index: 9999; font-weight: bold; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-        Offline Mode Active. Pre-ordering is disabled until school network reconnects.
-    </div>
-
-    <!-- Application Top Navigation Bar Frame -->
-    <header style="background: #2c3e50; padding: 15px 20px; color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">
-        <span style="font-size: 1.2rem; font-weight: bold; tracking-letter: 0.5px;">SMSHS Canteen</span>
-        <nav style="display: flex; align-items: center;">
-            <a href="/menu" style="color: white; text-decoration: none; margin-right: 20px; font-weight: 500;">Menu</a>
-            <a href="/staff" style="color: white; text-decoration: none; font-weight: 500; margin-right: 15px;">About</a>
-            <a href="/staff" style="color: white; text-decoration: none; font-weight: 500; margin-right: 15px;">Checkout</a>
-            <a href="/staff" style="color: white; text-decoration: none; font-weight: 500; margin-right: 15px;">Login</a>
-            <span style="background: #0a6102; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.85rem; font-weight: bold; display: inline-flex; align-items: center; gap: 3px;">
-                Basket: <span id="cart-badge-count">0</span>
-            </span>
-        </nav>
-    </header>
-
-    <!-- Main Content Container Frame Where Skeleton Layouts Injected -->
-    <main style="max-width: 800px; margin: 20px auto; padding: 0 15px; box-sizing: border-box;">
-        {% block content %}
-        <!-- Child page code blocks populate inside here -->
-        {% endblock %}
-    </main>
-
-    <!-- App Shell Footer -->
-    <footer style="text-align: center; padding: 25px 15px; color: #7f8c8d; font-size: 0.85rem; background: #eee; border-top: 1px solid #e2e2e2; margin-top: 50px;">
-        <p>&copy; 2026 St Marys Senior High School Canteen Ordering System</p>
-    </footer>
-
-    <!-- DEPENDENCY PATHWAYS LAYER (Ordered Execution) -->
+    <h1>canteeneats</h1>
     
-    <!-- 1. Core local cart browser array database management memory layer -->
-    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
-    
-    <!-- 2. UI rendering calculations & event intercept managers -->
-    <script src="{{ url_for('static', filename='js/ui.js') }}"></script>
-
-    <!-- 3. Local Web Worker Bootstrapper (Registers your sw.js rules) -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register("{{ url_for('static', filename='sw.js') }}")
-                    .then(registration => {
-                        console.log('[PWA OS Link] Service Worker active on scope:', registration.scope);
-                    })
-                    .catch(error => {
-                        console.error('[PWA OS Link] Service Worker registration crashed:', error);
-                    });
-            });
-        }
-    </script>
+    <a href="/register">
+        <button type="button">Sign up</button>
+    </a>
+    <a href="/login">
+        <button type="button">Login</button>
+    </a>
 </body>
 </html>
