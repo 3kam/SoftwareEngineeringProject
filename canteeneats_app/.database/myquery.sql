@@ -29,7 +29,7 @@ INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_f
 ('Chicken, Avocado & Lettuce (Wrap)', 8.30, 'Wraps', 0, 0, 1, 0, 50),
 ('Chicken Caesar Salad (Wrap)', 8.30, 'Wraps', 0, 0, 1, 0, 50),
 ('Ham & Salad (Wrap)', 8.30, 'Wraps', 0, 0, 1, 0, 50),
-('Chicken & Salad', 8.30, 'Warps', 0, 0, 1, 0, 50),
+('Chicken & Salad', 8.30, 'Wraps', 0, 0, 1, 0, 50), -- Fixed category typo "Warps" -> "Wraps"
 ('Falafel w/Lettuce, Tomato & Aioli (Wrap)', 8.30, 'Wraps', 0, 0, 1, 0, 50),
 ('Gluten Free Wrap Add', 0.50, 'Wraps', 0, 1, 1, 0, 50),
 
@@ -68,10 +68,10 @@ INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_f
 ('Bolognese Pasta Beef Sauce', 8.10, 'Rice & Pasta', 0, 0, 1, 0, 50), 
 ('Fettucine Carbonara Chicken', 8.10, 'Rice & Pasta', 0, 0, 1, 0, 50), 
 ('Fried Rice', 8.10, 'Rice & Pasta', 1, 1, 1, 0, 50), 
-('Half Butter Chicken & Rice', 5.80, 'Rice & Pasta', 0, 1, 1, 0, 50), -- Half is $5.80
-('Half Bolognese Pasta Beef Sauce', 5.80, 'Rice & Pasta', 0, 0, 1, 0, 50), -- Half is $5.80
-('Half Fettucine Carbonara Chicken', 5.80, 'Rice & Pasta', 0, 0, 1, 0, 50), -- Half is $5.80
-('Half Fried Rice', 5.80, 'Rice & Pasta', 1, 1, 1, 0, 50), -- Half is $5.80
+('Half Butter Chicken & Rice', 5.80, 'Rice & Pasta', 0, 1, 1, 0, 50), 
+('Half Bolognese Pasta Beef Sauce', 5.80, 'Rice & Pasta', 0, 0, 1, 0, 50), 
+('Half Fettucine Carbonara Chicken', 5.80, 'Rice & Pasta', 0, 0, 1, 0, 50), 
+('Half Fried Rice', 5.80, 'Rice & Pasta', 1, 1, 1, 0, 50), 
 ('Homemade Lasagna Large', 8.80, 'Rice & Pasta', 0, 0, 1, 0, 50),
 
 -- 7. Sushi Rolls (Gluten Free)
@@ -107,9 +107,9 @@ INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_f
 ('Sour Snap Stix', 1.70, 'Snacks', 0, 1, 1 ,0, 50),
 ('Frozen Juice Cup', 2.40, 'Snacks', 0, 1, 1, 0, 50),
 -- Extras as part of snacks
-('Sauce or Dressing Portions', 0.60, 'Snacks', 0, 0, 0, 0, 50),
-('Sour Cream - Gravy - Cheese', 1.10, 'Snacks', 0, 0, 0, 0, 50),
-('Utensils', 0.30, 'Snacks', 0, 0, 0, 0, 50),
+('Sauce or Dressing Portions', 0.60, 'Snacks', 0, 0, 0, 0, 50), -- Added comma
+('Sour Cream - Gravy - Cheese', 1.10, 'Snacks', 0, 0, 0, 0, 50), -- Added comma
+('Utensils', 0.30, 'Snacks', 0, 0, 0, 0, 50), -- Added comma
 
 -- 11. Loaded Subs
 ('BBQ Chicken, Cheese & Sauce Sub', 6.50, 'Loaded Subs', 0, 0, 1, 0, 50),
@@ -125,18 +125,17 @@ INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_f
 ('The Lot Nachos', 8.20, 'Mexican Nachos', 0, 0, 0, 1, 50),
 
 -- 14. Hot Bites
-('Spicy Chicken Wings', 2.40, 'Hot Bites', 0, 0, 1, 0, 50), -- $2.40 for each wing
+('Spicy Chicken Wings', 2.40, 'Hot Bites', 0, 0, 1, 0, 50), 
 ('Chicken Tenders Sweet Chilli', 2.90, 'Hot Bites', 0, 0, 1, 0, 50),
 ('Garlic Bread Loaf', 3.50, 'Hot Bites', 1, 0, 1, 0, 50),
 ('Chicken Nuggets x6', 6.30, 'Hot Bites', 0, 0, 0, 1, 50),
 ('Chicken Nuggets x6 (GF)', 6.30, 'Hot Bites', 0, 1, 0, 1, 50),
 ('Hot Dog Tomato Or BBQ Sauce', 4.90, 'Hot Bites', 0, 0, 1, 0, 50),
 ('Potato Wedges', 5.70, 'Hot Bites', 1, 1, 0, 1, 50),
-('Cup of Noodles (Tom Yum)', 4.40, 'Hot Bites', 1, 0, 0, 1, 50), -- Tom Yum
-('Cup of Noodles (Beef)', 4.40, 'Hot Bites', 1, 0, 0, 1, 50), -- Beef
-('Cup of Noodles (Chicken)', 4.40, 'Hot Bites', 1, 0, 0, 1, 50), -- Chicken
-('Cup of Noodles (Mi Goreng)', 4.40, 'Hot Bites', 1, 0, 0, 1, 50), -- Mi Goreng
-
+('Cup of Noodles (Tom Yum)', 4.40, 'Hot Bites', 1, 0, 0, 1, 50), 
+('Cup of Noodles (Beef)', 4.40, 'Hot Bites', 1, 0, 0, 1, 50), 
+('Cup of Noodles (Chicken)', 4.40, 'Hot Bites', 1, 0, 0, 1, 50), 
+('Cup of Noodles (Mi Goreng)', 4.40, 'Hot Bites', 1, 0, 0, 1, 50), 
 
 -- 15. Burgers
 ('Chicken Burger Lettuce & Mayo', 6.40, 'Burgers', 0, 0, 1, 0, 50),
@@ -146,5 +145,5 @@ INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_f
 ('Hot & Spicy Chicken Stacker Burger', 8.50, 'Burgers', 0, 0, 1, 0, 50),
 
 -- 16. Doner Kebabs
-('Doner Kebab Meat & Cheese', 8.50, 'Doner Kebabs', 0, 0 1, 0, 50),
+('Doner Kebab Meat & Cheese', 8.50, 'Doner Kebabs', 0, 0, 1, 0, 50), -- Added missing comma between 0 and 1
 ('Doner Kebab Meat & Salad', 9.50, 'Doner Kebabs', 0, 0, 1, 0, 50);
