@@ -1,29 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SMSHS Canteen Hub - Sign In</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Override default full-viewport margins since there is no sidebar structure on this route */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: #FFFDF9;
+            border: 4px solid var(--border-dark);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 8px 8px 0px var(--border-dark);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: 'Arial Black', sans-serif;
+            text-transform: uppercase;
+            font-size: 12px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-dark);
+            background: #FFFDF9;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-orange);
+            background-color: white;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--text-dark);
+            color: var(--bg-cream);
+            border: 3px solid var(--border-dark);
+            font-family: 'Arial Black', sans-serif;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background-color 0.15s, color 0.15s;
+            margin-top: 10px;
+        }
+
+        .auth-btn:hover {
+            background-color: var(--accent-orange);
+            color: white;
+        }
+
+        .auth-footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 13px;
+            border-top: 2px solid var(--border-dark);
+            padding-top: 15px;
+        }
+
+        .auth-footer a {
+            color: var(--accent-orange);
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
 <body>
-    <a href="/">
-        <button type="button">Back</button>
-    </a> 
-    
-    <div class="form-container">
-        <div class="form-header">
-            <h3>Log In</h3>
-        </div>
-        
-        <form action="/auth/login" method="POST">
-            <div class="input-container">
-                <input type="text" name="username" placeholder="username" required> 
-                <input type="password" name="password" placeholder="password" required> 
-                
-                <div class="forgot-password">
-                    <a href="#">Forgot password</a> 
-                </div>    
-                <div class="button-box">
-                    <button class="submit" type="submit">LOG IN</button> 
-                </div>  
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2 style="margin-top: 0; font-size: 32px; font-family: 'Arial Black', sans-serif; text-transform: uppercase; letter-spacing: -1px; border-bottom: 4px solid var(--border-dark); padding-bottom: 10px; margin-bottom: 30px;">
+                Sign In
+            </h2>
+
+            <form id="login-form" onsubmit="handleSmartAuthRedirect(event)">
+                <div class="form-group">
+                    <label for="username-input">Account Username</label>
+                    <input type="text" id="username-input" class="form-control" required placeholder="Enter username...">
+                </div>
+
+                <div class="form-group">
+                    <label for="password-input">Password Token</label>
+                    <input type="password" id="password-input" class="form-control" required placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="auth-btn">Authenticate</button>
+            </form>
+
+            <div class="auth-footer">
+                New user? <a href="/register">Create an Account</a>
             </div>
-        </form>
-        
-        <div class="signup">
-            Don't Have An Account? <a href="/register">Sign up</a>  
         </div>
     </div>
+
+    <script>
+        function handleSmartAuthRedirect(event) {
+            event.preventDefault();
+            
+            // Clean and normalize input string casing rules
+            const username = document.getElementById('username-input').value.trim().toLowerCase();
+            let assignedRole = "Student"; // Default fallback route group assignment
+
+            // Apply our routing cheat flags
+            if (username === "admin") {
+                assignedRole = "Admin";
+            } else if (username === "canteenstaff") {
+                assignedRole = "Staff";
+            }
+
+            // Write assignment directly to local browser configuration variables
+            localStorage.setItem('userRole', assignedRole);
+            console.log(`Bypassing auth pipelines. Assigned configuration role context to: ${assignedRole}`);
+
+            // Force hard redirect directly into the core dynamic structural menu array frame
+            window.location.replace("/menu");
+        }
+    </script>
 </body>
+</html>

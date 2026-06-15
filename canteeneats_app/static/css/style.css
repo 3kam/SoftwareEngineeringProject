@@ -1,0 +1,278 @@
+/* static/css/style.css - Brutalist Retro Canteen Theme */
+
+/* ==========================================
+   1. DESIGN SYSTEM VARIABLES (Inspired by image_ae158b.jpg)
+   ========================================== */
+:root {
+    --bg-cream: #EFE1CA;        /* Warm vintage background cream */
+    --text-dark: #111111;       /* Deep high-contrast black/charcoal */
+    --accent-orange: #C05621;   /* Terracotta rust orange accent */
+    --accent-green: #1C4D3E;    /* Deep forest green accent */
+    --border-dark: #111111;     /* Thick crisp lines */
+    --sidebar-dark: #1A1A1A;    /* Dark matte panels for navigation */
+}
+
+/* ==========================================
+   2. GLOBAL BASE STYLES
+   ========================================== */
+* {
+    box-sizing: border-box;
+    font-family: 'Arial Black', 'Impact', sans-serif; /* Emulates heavy bold retro headers */
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-cream);
+    color: var(--text-dark);
+}
+
+/* Fallback font system for standard text prose elements */
+p, span, label, input, button {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ==========================================
+   3. TOP RUNTIME CONTROL HEADER BAR
+   ========================================== */
+.header {
+    height: 60px;
+    width: 100%; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--text-dark); 
+    color: var(--bg-cream);
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    padding: 0 30px;
+    border-bottom: 2px solid var(--border-dark);
+    z-index: 3; 
+}
+
+.header h3 {
+    margin: 0;
+    font-family: 'Arial Black', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#user-display-tag {
+    font-size: 13px;
+    color: var(--bg-cream);
+    font-style: italic;
+    opacity: 0.9;
+}
+
+/* ==========================================
+   4. SIDE NAVIGATION BAR
+   ========================================== */
+.sidenav {
+    height: calc(100% - 60px); 
+    width: 230px; 
+    position: fixed; 
+    top: 60px; 
+    left: 0;
+    background-color: var(--sidebar-dark); 
+    overflow-y: auto; 
+    z-index: 2;
+    border-right: 3px solid var(--border-dark);
+}
+
+.sidenav-section-header {
+    background-color: #111111;
+    color: #888888;
+    padding: 12px 16px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #2d2d2d;
+}
+
+.sidenav a {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    color: var(--bg-cream);
+    padding: 14px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 13px;
+    border-bottom: 1px solid #2d2d2d; 
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.sidenav a:hover {
+    background-color: var(--bg-cream);
+    color: var(--text-dark);
+}
+
+.sidenav a.active {
+    background-color: var(--text-dark);
+    color: white;
+    border-left: 5px solid var(--accent-orange);
+}
+
+/* ==========================================
+   5. MAIN DASHBOARD CONTENT VIEWPORT
+   ========================================== */
+.content {
+    margin-left: 230px; 
+    margin-top: 60px;   
+    padding: 40px;
+    min-height: calc(100vh - 60px);
+}
+
+.content h2 {
+    margin-top: 0;
+    font-size: 42px;
+    font-family: 'Arial Black', 'Impact', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    border-bottom: 4px solid var(--border-dark);
+    padding-bottom: 12px;
+    color: var(--text-dark);
+}
+
+.content p {
+    font-size: 16px;
+    color: #444444;
+    margin-bottom: 30px;
+}
+
+/* ==========================================
+   6. INTERACTIVE FOOD SELECTION PRODUCT GRID
+   ========================================== */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+/* Stylized item card layout modeled directly off poster modules in image_ae158b.jpg */
+.menu-card {
+    background: #FFFDF9 !important; /* Slightly brighter cream sheet paper contrast */
+    border: 3px solid var(--border-dark) !important;
+    padding: 20px !important;
+    border-radius: 0px !important; /* Forces hard retro angles, no rounded curves */
+    box-shadow: 5px 5px 0px var(--border-dark) !important; /* Hard chunky retro shadow shift */
+    text-align: left !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.menu-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0px var(--border-dark) !important;
+}
+
+.menu-card div[style*="font-size: 14px"] {
+    font-family: 'Arial Black', sans-serif !important;
+    font-size: 18px !important;
+    text-transform: uppercase !important;
+    line-height: 1.2;
+    color: var(--text-dark);
+}
+
+/* Dietary Flag Styling (Green for Vegetarian/Gluten Free) */
+.menu-card span[style*="font-size: 11px"] {
+    color: var(--accent-green) !important;
+    font-family: 'Arial Black', sans-serif !important;
+    font-size: 12px !important;
+    border: 1px solid var(--accent-green);
+    padding: 2px 6px;
+    background: rgba(28, 77, 62, 0.05);
+}
+
+/* Item Cost Indicator */
+.menu-card span[style*="color: #111"] {
+    font-family: 'Arial Black', sans-serif !important;
+    font-size: 18px !important;
+    color: var(--accent-orange) !important; /* Distinct earthy orange for visibility */
+}
+
+/* Action button styled exactly like "JOIN THE PARTY" button layout from image_ae158b.jpg */
+.menu-card button {
+    margin-top: 15px !important;
+    width: 100% !important;
+    padding: 10px !important;
+    background-color: var(--text-dark) !important;
+    color: var(--bg-cream) !important;
+    border: 2px solid var(--border-dark) !important;
+    border-radius: 0px !important;
+    font-family: 'Arial Black', sans-serif;
+    text-transform: uppercase;
+    font-size: 12px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.menu-card button:hover {
+    background-color: var(--accent-orange) !important;
+    color: white !important;
+}
+
+/* ==========================================
+   7. PREPAID ORDER TRAY LAYOUT OVERLAYS
+   ========================================== */
+#order-tray-wrapper {
+    border-top: 4px dashed var(--border-dark) !important;
+    margin-top: 50px;
+    padding-top: 30px;
+}
+
+#order-tray-wrapper h3 {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 24px;
+    letter-spacing: -0.5px;
+}
+
+#tray-items-list div {
+    font-family: Arial, sans-serif;
+    padding: 12px 0 !important;
+    border-bottom: 2px solid var(--border-dark) !important;
+}
+
+/* Radio Choice Option Inputs */
+input[type="radio"] {
+    accent-color: var(--accent-orange);
+    cursor: pointer;
+}
+
+#tray-total-price {
+    font-family: 'Arial Black', sans-serif !important;
+    font-size: 26px;
+    color: var(--text-dark);
+}
+
+/* Order Submission Action Key button module */
+#submit-order-btn {
+    border-radius: 0px !important;
+    border: 3px solid var(--border-dark) !important;
+    background-color: var(--accent-green) !important; /* Uses the forest green brand theme color */
+    color: var(--bg-cream) !important;
+    font-family: 'Arial Black', sans-serif;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+    box-shadow: 4px 4px 0px var(--border-dark);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#submit-order-btn:hover:not([disabled]) {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--border-dark);
+    background-color: #246350 !important;
+}
+
+#submit-order-btn:disabled {
+    background-color: #bbb !important;
+    color: #666 !important;
+    box-shadow: none;
+    cursor: not-allowed;
+    border-color: #888 !important;
+}

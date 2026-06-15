@@ -9,34 +9,33 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-//  Middleware Configurations
+// Middleware Configurations
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//  Link your static assets
+// Link your static assets
 app.use("/static", express.static(path.join(__dirname, "static")));
 
 // Temporary local array acting as a mock user database
 const users = [];
 
-//  GET Routes: Serving HTML pages
+// GET Routes: Serving HTML pages
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "templates", "base.html")));
 app.get("/login", (req, res) => res.sendFile(path.join(__dirname, "templates", "login.html")));
 app.get("/register", (req, res) => res.sendFile(path.join(__dirname, "templates", "register.html")));
 
-//  Registration POST Route (with Hashing)
+// Registration POST Route (with Hashing)
 app.post("/auth/register", async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    const saltRounds = 10; 
+    const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const newUser = { username, email, password: hashedPassword };
     users.push(newUser);
 
     console.log("--- USER REGISTERED SECURELY ---");
-    console.log("Plain Text Password:", hashedPassword);
     console.log("Hashed Password saved:", hashedPassword);
     console.log("--------------------------------\n");
 
@@ -59,7 +58,7 @@ app.post("/auth/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (isMatch) {
-      console.log(` Login successful for user: ${username}`);
+      console.log(`Login successful for user: ${username}`);
       res.redirect("/");
     } else {
       console.log(`Invalid login attempt for user: ${username}`);

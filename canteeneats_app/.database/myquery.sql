@@ -1,3 +1,4 @@
+-- myquery.sql - This file is used to initialize the SQLite database with the necessary tables and seed data for the Canteen Eats application. It can be run using a SQLite client or integrated into the application startup process.
 -- 1. CLEANUP REGISTRY (Drops existing tables so you always start fresh)
 DROP TABLE IF EXISTS Orders;
 DROP TABLE IF EXISTS CanteenItems;

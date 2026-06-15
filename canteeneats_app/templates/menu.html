@@ -1,129 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>CSS Menu</title>
+    <title>SMSHS Canteen Hub - Menu</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-* {
-    box-sizing: border-box;
-}
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f9f9f9;
-}
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f9f9f9;
+        }
 
-/* 1. TOP HEADER BAR (Spans full width across the very top) */
-.header {
-    height: 60px;
-    width: 100%; 
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #111111; /* Changed to dark to match a unified theme, or keep #fff */
-    color: #EFE6D2;
-    display: flex;
-    align-items: center;
-    justify-content: space-between; 
-    padding: 0 30px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 3; /* Highest priority layer */
-}
+        /* 1. TOP RUNTIME CONTROL HEADER BAR */
+        .header {
+            height: 60px;
+            width: 100%; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #111111; 
+            color: #EFE6D2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; 
+            padding: 0 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 3; 
+        }
 
-/* Header Action Buttons Container */
-.header-actions {
-    display: flex;
-    gap: 15px;
-}
+        .header h3 {
+            margin: 0;
+            font-weight: 500;
+        }
 
-/* Button Styling */
-.btn {
-    text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: bold;
-    transition: background-color 0.2s;
-}
+        #user-display-tag {
+            font-size: 13px;
+            color: #EFE6D2;
+            font-style: italic;
+        }
 
-.btn-edit {
-    background-color: #EFE6D2;
-    color: #111;
-    border: 1px solid #ccc;
-}
+        /* 2. SIDE NAVIGATION (Scrollable for dynamic components) */
+        .sidenav {
+            height: calc(100% - 60px); 
+            width: 230px; 
+            position: fixed; 
+            top: 60px; 
+            left: 0;
+            background-color: #222222; 
+            overflow-y: auto; 
+            z-index: 2;
+        }
 
-.btn-edit:hover {
-    background-color: #dcd3be;
-}
+        .sidenav-section-header {
+            background-color: #1a1a1a;
+            color: #888888;
+            padding: 10px 16px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #2d2d2d;
+        }
 
-.btn-logout {
-    background-color: #d9534f; 
-    color: white;
-}
+        .sidenav a {
+            color: #EFE6D2;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+            border-bottom: 1px solid #2d2d2d; 
+            transition: background-color 0.2s, color 0.2s;
+        }
 
-.btn-logout:hover {
-    background-color: #c9302c;
-}
+        .sidenav a:hover {
+            background-color: #EFE6D2;
+            color: black;
+        }
 
-/* 2. SIDE NAVIGATION (Starts BELOW the 60px header) */
-.sidenav {
-    height: calc(100% - 60px); /* Spans remaining viewport height */
-    width: 200px;
-    position: fixed; 
-    top: 60px; /* Pushed down exactly by the header's height */
-    left: 0;
-    background-color: #222222; /* Slightly different dark shade for depth */
-    overflow-x: hidden; 
-    z-index: 2;
-}
+        .sidenav a.active {
+            background-color: #333333;
+            border-left: 4px solid #EFE6D2;
+        }
 
-/* Side navigation links */
-.sidenav a {
-    color: #EFE6D2;
-    padding: 16px;
-    text-decoration: none;
-    display: block;
-    border-bottom: 1px solid #333; /* Clean separator line */
-}
+        /* 3. MAIN DASHBOARD CONTENT VIEWPORT */
+        .content {
+            margin-left: 230px; 
+            margin-top: 60px;   
+            padding: 30px;
+            min-height: calc(100vh - 60px);
+        }
 
-/* Change color when hovering */
-.sidenav a:hover {
-    background-color: #EFE6D2;
-    color: black;
-}
-
-/* 3. MAIN CONTENT AREA (Pushed right and down to frame perfectly) */
-.content {
-    margin-left: 200px; /* Shifts right past the sidebar width */
-    margin-top: 60px;   /* Shifts down past the top header height */
-    padding: 30px;
-}
-</style>
+        .content h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #222;
+            padding-bottom: 8px;
+            color: #111;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- TOP HEADER SYSTEM BAR -->
     <div class="header">
         <h3>SMSHS Canteen Hub</h3>
-        <div class="header-actions">
-            <a href="edit_account.html" class="btn btn-edit">Edit Account</a>
-            <a href="/logout" class="btn btn-logout">Log Out</a>
+        <div>
+            <span id="user-display-tag">Validating credentials...</span>
         </div>
     </div>
 
-    <!-- SIDE NAVIGATION TREE -->
     <div class="sidenav">
-        <a href="signup.html">Sign Up</a> 
-        <a href="login.html">Log in</a>
+        <div class="sidenav-section-header">Authorized Actions</div>
+        
+        <div id="dynamic-navigation-links">
+            <a href="#" style="color: #666; font-style: italic;">Loading dynamic pathways...</a>
+        </div>
     </div>
 
-    <!-- PERSISTENT APP VIEWPORT -->
     <div class="content">
         <h2>Menu Options</h2>
-        <p>This is currently in a test mode as of now.</p>
+        <p style="color: #555;">Connecting to SQLite data stream segments...</p>
     </div>
 
+    <script src="/js/ui.js"></script>
+    <script src="/js/cart.js"></script>
+    
+    <script>
+        // Synchronous interface cue update to show active test profile status
+        document.addEventListener("DOMContentLoaded", () => {
+            const displayTag = document.getElementById('user-display-tag');
+            if (displayTag) {
+                const activeRole = localStorage.getItem('userRole') || 'Student';
+                displayTag.innerText = `Logged in as: ${activeRole}`;
+            }
+        });
+    </script>
 </body>
 </html>
