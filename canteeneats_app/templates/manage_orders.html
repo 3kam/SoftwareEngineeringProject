@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/static/images/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Manage Orders</title>
+    <style>
+        body { margin: 0; background-color: #ebc67e; font-family: Arial, sans-serif; }
+        header { background-color: #046307; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid #111; }
+        nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        main { padding: 40px; max-width: 900px; margin: 0 auto; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/menu"><img src="/static/images/logo.png" alt="Logo" style="height: 50px;"></a>
+        <nav id="dynamic-nav"></nav>
+        <a href="/about">About Us</a>
+        <a href="/">Logout</a>
+    </header>
+
+    <main>
+        <h2>Order Queue</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>User</th>
+                    <th>Items</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="order-table-body">
+                </tbody>
+        </table>
+    </main>
+
+    <script type="module">
+        import { getAuthorizedLinks } from "/static/js/roleManager.js";
+        const role = localStorage.getItem('userRole');
+        
+        // Security check: If not Staff, redirect
+        if (role !== 'Staff') window.location.href = "/menu";
+
+        const nav = document.getElementById('dynamic-nav');
+        nav.innerHTML = getAuthorizedLinks(role).map(l => `<a href="${l.path}">${l.name}</a>`).join('');
+    </script>
+</body>
+</html>
