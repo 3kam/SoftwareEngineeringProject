@@ -1,5 +1,16 @@
 # CanteenEats – SMSHS Canteen Ordering System
+---
+## Installation & Deployment
 
+```bash
+# Navigate to your application root directory
+cd canteeneats_app
+
+# Install required backend dependencies
+npm install
+
+# Launch the server instance
+node index.js
 ---
 
 ## Project Overview
@@ -98,14 +109,3 @@ This system addresses these issues through automation, digital balancing systems
 
 ---
 
-## Installation & Deployment
-
-```bash
-# Navigate to your application root directory
-cd canteeneats_app
-
-# Install required backend dependencies
-npm install
-
-# Launch the server instance
-node index.js
