@@ -1,16 +1,6 @@
 # CanteenEats – SMSHS Canteen Ordering System
----
-## Installation & Deployment
-
-```bash
-# Navigate to your application root directory
-cd canteeneats_app
-
-# Install required backend dependencies
-npm install
-
-# Launch the server instance
-node index.js
+enter through this website
+https://curly-succotash-r4x6v7qvj5rrhx6x5-3000.app.github.dev/
 ---
 
 ## Project Overview
@@ -108,4 +98,14 @@ This system addresses these issues through automation, digital balancing systems
 - **Reliability:** Persistent local file storage handling sudden disconnections without dropping active cart state  
 
 ---
+## Installation & Deployment
 
+```bash
+# Navigate to your application root directory
+cd canteeneats_app
+
+# Install required backend dependencies
+npm install
+
+# Launch the server instance
+node index.js
