@@ -1,4 +1,3 @@
-// sw.js - Root Service Worker
 const CACHE_NAME = 'canteen-eats-v1';
 
 // All the HTML routes and static assets to store for offline/instant loading

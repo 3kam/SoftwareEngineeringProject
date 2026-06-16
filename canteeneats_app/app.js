@@ -1,4 +1,3 @@
-// app.js
 import express from "express";
 import sqlite3 from "sqlite3";
 import path from "path";
@@ -28,7 +27,7 @@ const db = new sqlite3.Database(dbPath, async (err) => {
         console.log("Connected to the SQLite database successfully.");
         
         // --- DEVELOPER PASSWORD RESETTER ---
-        // This converts your old database scrypt hashes into bcrypt hashes automatically!
+        // This converts your old database scrypt hashes into bcrypt hashes automatically
         try {
             const saltRounds = 10;
             const adminHash = await bcrypt.hash("admin123", saltRounds);

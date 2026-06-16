@@ -1,4 +1,3 @@
-// orders/roleManager.js
 export const getAuthorizedLinks = (role) => {
     const baseLinks = [
         { name: "About", path: "/about" },

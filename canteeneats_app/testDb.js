@@ -1,3 +1,4 @@
+// testDb.js - A simple script to test the SQLite database connection and query the CanteenItems table
 import sqlite3 from 'sqlite3';
 import path from 'path';
 import { fileURLToPath } from 'url';

@@ -1,4 +1,3 @@
-// orders/menuRoutes.js
 import express from 'express';
 import sqlite3 from 'sqlite3';
 import path from 'path';

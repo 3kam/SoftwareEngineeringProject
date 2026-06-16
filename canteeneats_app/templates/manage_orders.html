@@ -43,7 +43,7 @@
     </main>
 
     <script>
-        // Defensive Load: Verify Staff role before initializing the queue
+        // Defensive Load: Verify Staff role before initialising the queue
         window.addEventListener('load', () => {
             const role = localStorage.getItem('userRole');
             
@@ -52,7 +52,7 @@
                 alert("Access Denied: You do not have Kitchen Staff permissions.");
                 window.location.replace('/menu');
             } else {
-                // Initialize polling only if authorized
+                // Initialise polling only if authorised
                 fetchKitchenQueue();
                 setInterval(fetchKitchenQueue, 5000);
             }
