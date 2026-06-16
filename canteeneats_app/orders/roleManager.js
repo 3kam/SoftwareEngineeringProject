@@ -1,5 +1,4 @@
 // orders/roleManager.js
-
 export const getAuthorizedLinks = (role) => {
     const baseLinks = [
         { name: "About", path: "/about" },
@@ -7,12 +6,15 @@ export const getAuthorizedLinks = (role) => {
         { name: "Logout", path: "/auth/logout" }
     ];
 
-    switch (role) {
-        case "admin":
+    // Normalize the role input to lowercase to avoid case-sensitivity bugs
+    const normalizedRole = role ? role.toLowerCase() : 'student';
+
+    switch (normalizedRole) {
+        case "administrator": // Matches "Administrator" from DB
             return [...baseLinks, { name: "Edit Account", path: "/edit_account" }];
-        case "canteenstaff":
+        case "staff":         // Matches "Staff" from DB
             return [...baseLinks, { name: "Manage Orders", path: "/manage_orders" }];
-        case "student":
+        case "student":       // Matches "Student" from DB
             return [
                 { name: "Menu", path: "/menu" },
                 { name: "My Orders", path: "/my_orders" },

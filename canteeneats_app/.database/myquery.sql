@@ -38,11 +38,11 @@ CREATE TABLE Orders (
 );
 
 -- 3. INJECT USER SEED RECORDS
-INSERT INTO Users (username, password_hash, role, prepaid_balance) VALUES 
-('student1@smshs.com', 'scrypt:32768:8:1$hash1', 'Student', 25.50),
-('student2@smshs.com', 'scrypt:32768:8:1$hash2', 'Student', 4.20),
-('kitchen_staff@smshs.com', 'scrypt:32768:8:1$hash3', 'Staff', 0.00),
-('admin_canteen@smshs.com', 'scrypt:32768:8:1$hash4', 'Admin', 100.00);
+INSERT INTO Users (Email_address,username, password_hash, role, prepaid_balance) VALUES 
+('student1@smshs.com', 'student1', 'scrypt:32768:8:1$hash1', 'Student', 25.50),
+('student2@smshs.com', 'student2', 'scrypt:32768:8:1$hash2', 'Student', 4.20),
+('kitchen_staff@smshs.com', 'canteenstaff', 'scrypt:32768:8:1$hash3', 'Staff', 0.00),
+('admin_canteen@smshs.com', 'admin', 'scrypt:32768:8:1$hash4', 'Administrator', 100.00);
 
 -- 4. INJECT FULL SMSHS MENU DATA
 INSERT INTO CanteenItems (item_name, price, category, is_vegetarian, is_gluten_free, is_everyday_items, is_occasional_items, stock_level) VALUES 
