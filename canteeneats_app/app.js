@@ -3,11 +3,13 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import bcrypt from "bcrypt";
+import menuRoutes from "./orders/menuRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+app.use("/api", menuRoutes);
 
 // Middleware Configurations
 app.use(express.json());
@@ -23,6 +25,11 @@ const users = [];
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "templates", "base.html")));
 app.get("/login", (req, res) => res.sendFile(path.join(__dirname, "templates", "login.html")));
 app.get("/register", (req, res) => res.sendFile(path.join(__dirname, "templates", "register.html")));
+app.get("/about", (req, res) => res.sendFile(path.join(__dirname, "templates", "about.html")));
+app.get("/edit_account", (req, res) => res.sendFile(path.join(__dirname, "templates", "edit_account.html")));
+app.get("/manage_orders", (req, res) => res.sendFile(path.join(__dirname, "templates", "manage_orders.html")));
+app.get("/menu", (req, res) => res.sendFile(path.join(__dirname, "templates", "menu.html")));
+app.get("/my_orders", (req, res) => res.sendFile(path.join(__dirname, "templates", "my_orders.html")));
 
 // Registration POST Route (with Hashing)
 app.post("/auth/register", async (req, res) => {

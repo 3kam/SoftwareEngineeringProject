@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+ <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <title>My Orders & Cart - CanteenEats</title>
+    <style>
+      body { margin: 0; background-color: #ebc67e; display: flex; flex-direction: column; min-height: 100vh; font-family: Arial, sans-serif; }
+      header { background-color: #046307; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid #111; }
+      nav { display: flex; align-items: center; }
+      nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; text-transform: uppercase; font-size: 14px; }
+      
+      /* Balance Display Styling */
+      .balance-badge { background-color: white; color: #046307; padding: 8px 15px; border-radius: 20px; font-weight: bold; margin-right: 20px; border: 2px solid #111; }
+
+      main { flex: 1; padding: 40px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
+      .order-card { background: white; padding: 30px; width: 100%; max-width: 900px; border: 3px solid #111; box-shadow: 8px 8px 0px #111; }
+      
+      table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+      th, td { padding: 15px; text-align: left; border-bottom: 2px solid #eee; }
+      th { font-family: "Arial Black", sans-serif; text-transform: uppercase; }
+      
+      .search-input { width: 100%; padding: 12px; margin-bottom: 20px; border: 2px solid #111; box-sizing: border-box; }
+      header a img { display: block; }
+
+      /* Cart Specific Styles */
+      .remove-btn { background: #d9534f; color: white; border: 2px solid #111; padding: 5px 12px; cursor: pointer; font-weight: bold; border-radius: 4px; }
+      .remove-btn:hover { background: #c9302c; }
+      .checkout-row { background: #f9f9f9; font-weight: bold; font-size: 18px; }
+      .pay-btn { background: #046307; color: white; border: 2px solid #111; padding: 10px 20px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 16px; float: right; margin-top: 20px; }
+      .pay-btn:hover { background: #034f05; }
+    </style>
+ </head>
+ <body>
+    <header>
+      <a href="/menu"><img src="/static/images/logo.png" alt="Logo" style="height: 50px" /></a>
+      <nav>
+        <div class="balance-badge" id="nav-balance">Balance: $12.00</div>
+        <a href="/menu">Menu</a>
+        <a href="/my_orders">My Orders</a>
+        <a href="/about">About Us</a>
+        <a href="/base">Logout</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="order-card">
+        <h2>Items in Cart (Pending Payment)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 50px;">Cancel</th>
+              <th>Item</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody id="cart-body">
+            </tbody>
+          <tfoot>
+            <tr class="checkout-row">
+              <td colspan="2" style="text-align: right;">Total to Pay:</td>
+              <td id="cart-total">$0.00</td>
+            </tr>
+          </tfoot>
+        </table>
+        <button class="pay-btn" onclick="processPayment()">Pay Now</button>
+        <div style="clear: both;"></div> </div>
+
+      <div class="order-card">
+        <h2>My Order History</h2>
+        <input type="text" class="search-input" placeholder="Search by product name..." />
+        <table>
+          <thead><tr><th>Date</th><th>Order ID</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
+          <tbody id="order-body">
+             </tbody>
+        </table>
+      </div>
+    </main>
+
+    <script>
+      // 1. Initialize User Balance in LocalStorage (Starts at $12.00 if it doesn't exist)
+      let currentBalance = parseFloat(localStorage.getItem('studentBalance'));
+      if (isNaN(currentBalance)) {
+          currentBalance = 12.00;
+          localStorage.setItem('studentBalance', currentBalance.toFixed(2));
+      }
+
+      // Update the badge on screen load
+      document.getElementById('nav-balance').innerText = `Balance: $${currentBalance.toFixed(2)}`;
+
+      // 2. Load the Cart from LocalStorage
+      function loadPendingCart() {
+          let cart = JSON.parse(localStorage.getItem('canteenCart')) || [];
+          const cartBody = document.getElementById('cart-body');
+          
+          if (cart.length === 0) {
+              cartBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Your cart is empty. Please visit the menu.</td></tr>';
+              document.getElementById('cart-total').innerText = '$0.00';
+              return;
+          }
+
+          let total = 0;
+          cartBody.innerHTML = cart.map((item, index) => {
+              let itemTotal = item.price * item.quantity;
+              total += itemTotal;
+              return `
+                  <tr>
+                      <td><button class="remove-btn" onclick="removeItem(${index})">X</button></td>
+                      <td>${item.item_name} (x${item.quantity})</td>
+                      <td>$${itemTotal.toFixed(2)}</td>
+                  </tr>
+              `;
+          }).join('');
+
+          document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+          document.getElementById('cart-total').dataset.rawTotal = total; // Store raw number for calculation
+      }
+
+      // 3. Remove Item Function (The 'X' Button)
+      function removeItem(index) {
+          let cart = JSON.parse(localStorage.getItem('canteenCart')) || [];
+          cart.splice(index, 1); // Remove the item at the specific index
+          localStorage.setItem('canteenCart', JSON.stringify(cart)); // Save updated cart
+          loadPendingCart(); // Refresh the screen
+      }
+
+      // 4. Process Payment Logic
+      function processPayment() {
+          let cart = JSON.parse(localStorage.getItem('canteenCart')) || [];
+          if (cart.length === 0) {
+              alert("Your cart is empty!");
+              return;
+          }
+
+          let cartTotal = parseFloat(document.getElementById('cart-total').dataset.rawTotal);
+
+          // Check if user has enough money
+          if (cartTotal > currentBalance) {
+              alert(`Insufficient funds! Your total is $${cartTotal.toFixed(2)} but your balance is only $${currentBalance.toFixed(2)}. Please use the 'X' button to remove an item.`);
+              return;
+          }
+
+          // Deduct money
+          currentBalance -= cartTotal;
+          localStorage.setItem('studentBalance', currentBalance.toFixed(2));
+          document.getElementById('nav-balance').innerText = `Balance: $${currentBalance.toFixed(2)}`;
+
+          // Clear the cart
+          localStorage.removeItem('canteenCart');
+          loadPendingCart();
+
+          // Success message (In the future, this is where you'd send a POST request to your Express server to save the receipt to the Orders database)
+          alert("Payment Successful! Your order has been sent to the kitchen.");
+      }
+
+      // 5. Load Order History (Your existing API call)
+      async function loadOrderHistory() {
+        try {
+          const response = await fetch("/api/my-orders");
+          const orders = await response.json();
+          const tbody = document.getElementById("order-body");
+          tbody.innerHTML = orders.map(o => `
+            <tr><td>${o.date}</td><td>${o.order_id}</td><td>${o.items}</td><td>${o.total_price}</td><td><strong>${o.status}</strong></td></tr>
+          `).join("");
+        } catch (error) { 
+            console.error("Error loading orders:", error); 
+        }
+      }
+
+      // Run functions on startup
+      loadPendingCart();
+      loadOrderHistory();
+    </script>
+ </body>
+</html>

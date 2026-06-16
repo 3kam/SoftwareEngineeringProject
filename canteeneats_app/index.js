@@ -1,9 +1,10 @@
 // index.js
-import app from "./app.js"; // Import the configured app instance
+import app from "./app.js";
 
-const PORT = 8000;
+const PORT = 3000;
 
-// Bind to 0.0.0.0 for reliable port-forwarding mapping in cloud workspaces
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`CanteenEats running successfully at http://localhost:${PORT}`);
+app.listen(PORT, () => {
+    console.log(`=================================`);
+    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`=================================`);
 });

@@ -2,129 +2,60 @@
 <html lang="en">
 <head>
     <title>SMSHS Canteen Hub - Create Account</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <style>
-        /* Share consistent structural design system blocks from login */
-        .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .auth-card {
-            background: #FFFDF9;
-            border: 4px solid var(--border-dark);
-            padding: 40px;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 8px 8px 0px var(--border-dark);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-family: 'Arial Black', sans-serif;
-            text-transform: uppercase;
-            font-size: 12px;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border-dark);
-            background: #FFFDF9;
-            font-size: 14px;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--accent-orange);
-            background-color: white;
-        }
-
-        .auth-btn {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--accent-green); /* Uses forest green theme style */
-            color: var(--bg-cream);
-            border: 3px solid var(--border-dark);
-            font-family: 'Arial Black', sans-serif;
-            text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 1px;
-            cursor: pointer;
-            box-shadow: 4px 4px 0px var(--border-dark);
-            transition: transform 0.1s, box-shadow 0.1s;
-            margin-top: 10px;
-        }
-
-        .auth-btn:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px var(--border-dark);
-            background-color: #246350;
-        }
-
-        .auth-footer {
-            margin-top: 25px;
-            text-align: center;
-            font-size: 13px;
-            border-top: 2px solid var(--border-dark);
-            padding-top: 15px;
-        }
-
-        .auth-footer a {
-            color: var(--accent-orange);
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .auth-footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-
     <div class="auth-container">
         <div class="auth-card">
-            <h2 style="margin-top: 0; font-size: 32px; font-family: 'Arial Black', sans-serif; text-transform: uppercase; letter-spacing: -1px; border-bottom: 4px solid var(--border-dark); padding-bottom: 10px; margin-bottom: 30px;">
-                Register
-            </h2>
-
-            <form id="register-form" onsubmit="handleRegistrationSubmit(event)">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img src="/static/images/logo.png" alt="Logo" style="height: 60px;">
+            </div>
+            <h2 style="border-bottom: 4px solid var(--border-dark);">Register</h2>
+            
+            <form id="register-form" action="/auth/register" method="POST" onsubmit="return validateForm(event)">
                 <div class="form-group">
-                    <label for="reg-username">Preferred Username</label>
-                    <input type="text" id="reg-username" class="form-control" required placeholder="e.g., admin, canteenstaff, student123">
+                    <label>Username</label>
+                    <input type="text" name="username" class="form-control" required>
                 </div>
-
                 <div class="form-group">
-                    <label for="reg-password">Password Choice</label>
-                    <input type="password" id="reg-password" class="form-control" required placeholder="••••••••">
+                    <label>Email Address</label>
+                    <input type="email" name="email" class="form-control" required>
                 </div>
-
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="reg-password" name="password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="confirm-password" class="form-control" required>
+                </div>
                 <button type="submit" class="auth-btn">Create Profile</button>
             </form>
 
             <div class="auth-footer">
-                Already registered? <a href="/login">Return to Sign In</a>
+                Already have an account? <a href="/login">Click here to Login</a>
             </div>
         </div>
     </div>
 
     <script>
-        function handleRegistrationSubmit(event) {
-            event.preventDefault();
-            alert("Account mock structure built successfully. Redirecting you to sign in using your system credentials.");
-            window.location.href = "/login";
+        function validateForm(event) {
+            const password = document.getElementById('reg-password').value;
+            const confirm = document.getElementById('confirm-password').value;
+            
+            // Password Complexity Regex: Min 8 chars, 1 uppercase, 1 number, 1 symbol
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+            if (!passwordRegex.test(password)) {
+                alert("Password must be 8+ chars with 1 uppercase letter, 1 number, and 1 symbol.");
+                return false;
+            }
+
+            if (password !== confirm) {
+                alert("Passwords do not match!");
+                return false;
+            }
+            return true;
         }
     </script>
 </body>

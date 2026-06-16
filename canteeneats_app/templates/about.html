@@ -1,67 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>SMSHS Canteen Hub - About</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Browser Cache Invalidation Gates -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>About CanteenEats</title>
+    <style>
+        body { margin: 0; background-color: #ebc67e; display: flex; flex-direction: column; min-height: 100vh; font-family: Arial, sans-serif; }
+        header { background-color: #046307; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid #111; }
+        footer { background-color: #046307; color: white; padding: 20px; text-align: center; }
+        nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; text-transform: uppercase; font-size: 14px; }
+        main { flex: 1; padding: 40px; max-width: 800px; margin: 0 auto; }
+        header a img { display: block; }
+    </style>
 </head>
 <body>
+    <header>
+        <a href="/menu"><img src="/static/images/logo.png" alt="Logo" style="height: 50px;"></a>
+        <nav id="dynamic-nav"></nav>
+    </header>
 
-    <!-- TOP HEADER SYSTEM BAR -->
-    <div class="header">
-        <h3>SMSHS Canteen Hub</h3>
-        <div>
-            <span id="user-display-tag">Validating credentials...</span>
-        </div>
-    </div>
+    <main id="content">
+        <h2>About CanteenEats</h2>
+        <p><strong>CanteenEats</strong> is a streamlined digital management system designed to modernize the campus dining experience. By connecting students directly with the canteen inventory, we aim to eliminate long queues and provide real-time updates on food availability.</p>
+        <h2>Our Goal</h2>
+        <p>Our primary objective is to create a <strong>frictionless ordering process</strong>. We believe technology should make daily life easier, which is why we’ve built CanteenEats to:</p>
+        <ul>
+            <li><strong>Reduce Wait Times:</strong> Order from your device and pick up when ready.</li>
+            <li><strong>Improve Inventory Management:</strong> Provide canteen staff with precise, data-driven insights into stock levels.</li>
+            <li><strong>Promote Efficiency:</strong> Create a reliable, user-friendly platform for the entire campus community.</li>
+        </ul>
+    </main>
 
-    <!-- ROLE-BASED NAVIGATION SIDEBAR -->
-    <div class="sidenav">
-        <div class="sidenav-section-header">Authorized Actions</div>
-        <div id="dynamic-navigation-links">
-            <a href="#" style="color: #666; font-style: italic;">Loading dynamic pathways...</a>
-        </div>
-    </div>
+    <footer><p>&copy; 2026 CanteenEats System</p></footer>
 
-    <!-- MAIN EDITORIAL CONTENT VIEWPORT -->
-    <div class="content">
-        <h2>About Our Canteen</h2>
-        <p>Operational frameworks and nutrition guidelines for St Marys Senior High School.</p>
-        
-        <!-- Retro Info Box Module -->
-        <div style="background: #FFFDF9; border: 3px solid #111; padding: 25px; box-shadow: 5px 5px 0px #111; margin-bottom: 30px;">
-            <h4 style="margin-top: 0; font-family: 'Arial Black', sans-serif; text-transform: uppercase; font-size: 20px; color: var(--accent-orange);">Daily Operations</h4>
-            <p style="margin-bottom: 0;">Our system processes online pre-ordered trays for both Recess and Lunch pick-up windows. Cut-off times apply strictly at the start of the school day to ensure kitchen prep timelines are maintained.</p>
-        </div>
-
-        <!-- Retro Info Box Module 2 -->
-        <div style="background: #FFFDF9; border: 3px solid #111; padding: 25px; box-shadow: 5px 5px 0px #111;">
-            <h4 style="margin-top: 0; font-family: 'Arial Black', sans-serif; text-transform: uppercase; font-size: 20px; color: var(--accent-green);">Healthy School Canteen Strategy</h4>
-            <p>Our complete relational SQLite product index matches the NSW Healthy School Canteens Strategy guidelines, classifying items cleanly by operational frequency:</p>
-            <ul style="font-family: Arial, sans-serif; line-height: 1.6; padding-left: 20px;">
-                <li><strong>Everyday Items (V / G):</strong> High-nutrition essentials available to order without restriction.</li>
-                <li><strong>Occasional Items:</strong> Secondary options structured to manage student balance volumes safely.</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- INJECT EXTRINSIC WEB ASSET PIPELINES -->
-    <script src="/js/ui.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const displayTag = document.getElementById('user-display-tag');
-            if (displayTag) {
-                const activeRole = localStorage.getItem('userRole') || 'Student';
-                displayTag.innerText = `Logged in as: ${activeRole}`;
-            }
-        });
+    <script type="module">
+        import { getAuthorizedLinks } from "/static/js/roleManager.js";
+        const role = localStorage.getItem('userRole') || 'student';
+        const links = getAuthorizedLinks(role);
+        const nav = document.getElementById('dynamic-nav');
+        nav.innerHTML = links.map(l => `<a href="${l.path}">${l.name}</a>`).join('');
     </script>
 </body>
 </html>

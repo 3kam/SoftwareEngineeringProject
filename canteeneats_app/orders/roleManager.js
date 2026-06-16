@@ -1,30 +1,24 @@
 // orders/roleManager.js
 
-const ROLE_NAVIGATION = {
-    Student: [
-        { label: "View Menu Grid", path: "menu.html" },
-        { label: "My Active Orders", path: "myorders.html" }
-    ],
-    Staff: [
-        { label: "Kitchen Dashboard", path: "manage_items.html" }
-    ],
-    Admin: [
-        { label: "Administrator Dashboard", path: "edit_account.html" }
-    ],
-    Universal: [
-        { label: "About", path: "about.html" },
-        { label: "Settings", path: "setting.html" }
-    ]
+export const getAuthorizedLinks = (role) => {
+    const baseLinks = [
+        { name: "About", path: "/about" },
+        { name: "Setting", path: "/setting" },
+        { name: "Logout", path: "/auth/logout" }
+    ];
+
+    switch (role) {
+        case "admin":
+            return [...baseLinks, { name: "Edit Account", path: "/edit_account" }];
+        case "canteenstaff":
+            return [...baseLinks, { name: "Manage Orders", path: "/manage_orders" }];
+        case "student":
+            return [
+                { name: "Menu", path: "/menu" },
+                { name: "My Orders", path: "/my_orders" },
+                ...baseLinks
+            ];
+        default:
+            return baseLinks;
+    }
 };
-
-/**
- * Generates the clean array of navigation links based on user role
- * @param {string} role - Student, Staff, or Admin
- */
-function getNavigationForRole(role) {
-    const specificLinks = ROLE_NAVIGATION[role] || [];
-    const universalLinks = ROLE_NAVIGATION.Universal;
-    return [...specificLinks, ...universalLinks];
-}
-
-module.exports = { getNavigationForRole };
