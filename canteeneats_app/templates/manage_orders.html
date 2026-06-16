@@ -4,49 +4,117 @@
     <meta charset="UTF-8">
     <link rel="icon" href="/static/images/favicon.png" type="image/png">
     <link rel="stylesheet" href="/static/css/style.css">
-    <title>Manage Orders</title>
+    <title>Kitchen Dashboard</title>
     <style>
-        body { margin: 0; background-color: #ebc67e; font-family: Arial, sans-serif; }
+        body { margin: 0; background-color: #ebc67e; font-family: Arial, sans-serif; display: flex; flex-direction: column; min-height: 100vh; }
         header { background-color: #046307; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid #111; }
-        nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; font-size: 14px; }
-        main { padding: 40px; max-width: 900px; margin: 0 auto; }
-        table { width: 100%; border-collapse: collapse; background: white; }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; }
+        header a img { display: block; }
+        
+        main { padding: 40px; max-width: 1000px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+        .queue-wrapper { background: white; padding: 30px; border: 4px solid #111; box-shadow: 8px 8px 0px #111; }
+        
+        .order-widget { border: 3px solid #111; background: #fffdf6; margin-bottom: 20px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 4px 4px 0px #111; }
+        .order-details-pane { font-size: 15px; font-weight: bold; color: #111; line-height: 1.5; }
+        .order-highlight-items { font-size: 18px; color: #046307; font-family: "Arial Black", sans-serif; margin: 5px 0; }
+        
+        .status-dropdown { padding: 8px; font-weight: bold; border: 2px solid #111; background: white; cursor: pointer; font-size: 14px; }
+        .finish-widget-btn { padding: 10px 18px; background-color: #d9534f; color: white; border: 2px solid #111; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-left: 15px; font-size: 13px; }
+        .finish-widget-btn:hover { background-color: #c9302c; }
+        
+        .empty-queue-notice { font-weight: bold; font-size: 18px; text-align: center; padding: 20px; color: #555; }
     </style>
 </head>
 <body>
     <header>
-        <a href="/menu"><img src="/static/images/logo.png" alt="Logo" style="height: 50px;"></a>
-        <nav id="dynamic-nav"></nav>
-        <a href="/about">About Us</a>
-        <a href="/">Logout</a>
+        <a href="/manage_orders"><img src="/static/images/logo.png" alt="Logo" style="height: 50px;"></a>
+        <nav>
+            <a href="/manage_orders">Kitchen Dashboard</a>
+            <a href="/about">About Us</a>
+            <a onclick="logoutSecurely()">Logout</a>
+        </nav>
     </header>
 
     <main>
-        <h2>Order Queue</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>User</th>
-                    <th>Items</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="order-table-body">
-                </tbody>
-        </table>
+        <div class="queue-wrapper">
+            <h2>Live Canteen Kitchen Workflow Queue</h2>
+            <div id="live-queue-container"></div>
+        </div>
     </main>
 
-    <script type="module">
-        import { getAuthorizedLinks } from "/static/js/roleManager.js";
-        const role = localStorage.getItem('userRole');
-        
-        // Security check: If not Staff, redirect
-        if (role !== 'Staff') window.location.href = "/menu";
+    <script>
+        // Defensive Load: Verify Staff role before initializing the queue
+        window.addEventListener('load', () => {
+            const role = localStorage.getItem('userRole');
+            
+            // Explicitly checking for 'Staff' role assigned in app.js
+            if (role !== 'Staff') {
+                alert("Access Denied: You do not have Kitchen Staff permissions.");
+                window.location.replace('/menu');
+            } else {
+                // Initialize polling only if authorized
+                fetchKitchenQueue();
+                setInterval(fetchKitchenQueue, 5000);
+            }
+        });
 
-        const nav = document.getElementById('dynamic-nav');
-        nav.innerHTML = getAuthorizedLinks(role).map(l => `<a href="${l.path}">${l.name}</a>`).join('');
+        async function fetchKitchenQueue() {
+            try {
+                const response = await fetch('/api/staff/queue');
+                const dynamicOrders = await response.json();
+                const container = document.getElementById('live-queue-container');
+
+                if (dynamicOrders.length === 0) {
+                    container.innerHTML = `<div class="empty-queue-notice">No orders currently active in the queue pipeline.</div>`;
+                    return;
+                }
+
+                container.innerHTML = dynamicOrders.map(ord => `
+                    <div class="order-widget" id="widget-card-${ord.order_id}">
+                        <div class="order-details-pane">
+                            <div><strong>Order Allocation Ref:</strong> #${ord.order_id}</div>
+                            <div><strong>Student Target:</strong> ${ord.username}</div>
+                            <div class="order-highlight-items">${ord.item_name} (x${ord.quantity})</div>
+                            <div><strong>Pickup Target Window:</strong> ${ord.pickup_period}</div>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <select class="status-dropdown" id="dropdown-${ord.order_id}" onchange="modifyOrderStatus(${ord.order_id})">
+                                <option value="Received" ${ord.status === 'Received' ? 'selected' : ''}>Received</option>
+                                <option value="Preparing" ${ord.status === 'Preparing' ? 'selected' : ''}>Preparing</option>
+                            </select>
+                            <button class="finish-widget-btn" onclick="finalizeKitchenOrder(${ord.order_id})">Finish Order</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) { console.error("Error pooling queue pipeline payload.", err); }
+        }
+
+        async function modifyOrderStatus(orderId) {
+            const selectValue = document.getElementById(`dropdown-${orderId}`).value;
+            await fetch('/api/staff/update-status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order_id: orderId, status: selectValue })
+            });
+        }
+
+        async function finalizeKitchenOrder(orderId) {
+            const res = await fetch('/api/staff/update-status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order_id: orderId, status: 'Done' })
+            });
+            
+            if (res.ok) {
+                const targetCard = document.getElementById(`widget-card-${orderId}`);
+                if (targetCard) targetCard.remove();
+            } else { alert("Failed to sign off order."); }
+        }
+
+        function logoutSecurely() {
+            localStorage.clear();
+            window.location.replace('/');
+        }
     </script>
 </body>
 </html>

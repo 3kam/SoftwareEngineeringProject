@@ -4,40 +4,160 @@
     <meta charset="UTF-8">
     <link rel="icon" href="/static/images/favicon.png" type="image/png">
     <link rel="stylesheet" href="/static/css/style.css">
-    <title>Edit Account</title>
+    <title>Admin Dashboard Panel</title>
     <style>
-        body { margin: 0; background-color: #ebc67e; font-family: Arial, sans-serif; }
+        body { margin: 0; background-color: #ebc67e; font-family: Arial, sans-serif; display: flex; flex-direction: column; min-height: 100vh; }
         header { background-color: #046307; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid #111; }
-        nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; font-size: 14px; }
-        main { padding: 40px; max-width: 600px; margin: 0 auto; background: white; border: 4px solid #111; }
+        nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; }
+        header a img { display: block; }
+        
+        main { padding: 40px; max-width: 1100px; margin: 0 auto; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: 40px; }
+        .admin-card { background: white; padding: 30px; border: 4px solid #111; box-shadow: 8px 8px 0px #111; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; }
+        th, td { padding: 12px; border: 2px solid #111; text-align: left; font-weight: bold; }
+        th { background-color: #046307; color: white; font-family: "Arial Black", sans-serif; text-transform: uppercase; }
+        
+        .admin-input { width: 90px; padding: 6px; border: 2px solid #111; font-weight: bold; }
+        .action-btn { background: #111; color: white; border: none; padding: 8px 14px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; }
+        .action-btn:hover { background: #046307; }
     </style>
 </head>
 <body>
     <header>
-        <a href="/menu"><img src="/static/images/logo.png" alt="Logo" style="height: 50px;"></a>
-        <nav id="dynamic-nav"></nav>
-        <a href="/about">About Us</a>
-        <a href="/">Logout</a>
+        <a href="/edit_account"><img src="/static/images/logo.png" alt="Logo" style="height: 50px;"></a>
+        <nav>
+            <a href="/edit_account">Admin Panel</a>
+            <a href="/about">About Us</a>
+            <a onclick="logoutSecurely()">Logout</a>
+        </nav>
     </header>
 
     <main>
-        <h2>Account Management</h2>
-        <form id="edit-form">
-            <label>Update User Role:</label>
-            <input type="text" id="role-input" placeholder="Administrator/Staff/Student">
-            <button type="submit">Update</button>
-        </form>
+        <div class="admin-card">
+            <h2>User Account Balance Adjustment (Users Table)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Current Account Balance</th>
+                        <th>Credit Top-Up Value</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table-body"></tbody>
+            </table>
+        </div>
+
+        <div class="admin-card">
+            <h2>Canteen Menu Customisation (Stock & Pricing)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Description</th>
+                        <th>Price ($)</th>
+                        <th>Available Stock Items</th>
+                        <th>Commit Execution</th>
+                    </tr>
+                </thead>
+                <tbody id="menu-table-body"></tbody>
+            </table>
+        </div>
     </main>
 
-    <script type="module">
-        import { getAuthorizedLinks } from "/static/js/roleManager.js";
-        const role = localStorage.getItem('userRole');
-        
-        // Security check: Only Admin allowed
-        if (role !== 'Administrator') window.location.href = "/menu";
+    <script>
+        // Defensive load: Only loads data if the user is a verified Administrator
+        window.addEventListener('load', () => {
+            const role = localStorage.getItem('userRole');
+            if (role !== 'Administrator') {
+                window.location.replace('/menu');
+            } else {
+                loadUserDirectory();
+                loadMenuControls();
+            }
+        });
 
-        const nav = document.getElementById('dynamic-nav');
-        nav.innerHTML = getAuthorizedLinks(role).map(l => `<a href="${l.path}">${l.name}</a>`).join('');
+        async function loadUserDirectory() {
+            try {
+                const response = await fetch('/api/admin/users');
+                const users = await response.json();
+                const tbody = document.getElementById('users-table-body');
+                tbody.innerHTML = users.map(u => `
+                    <tr>
+                        <td>${u.user_id}</td>
+                        <td>${u.username}</td>
+                        <td>$${parseFloat(u.prepaid_balance || 0).toFixed(2)}</td>
+                        <td>
+                            <input type="number" step="0.01" id="amt-${u.user_id}" class="admin-input" placeholder="0.00">
+                            <button class="action-btn" onclick="executeTopUp(${u.user_id})">Top Up</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) { console.error("Failed to query database profiles.", err); }
+        }
+
+        async function loadMenuControls() {
+            try {
+                const response = await fetch('/api/menu-items');
+                const items = await response.json();
+                const tbody = document.getElementById('menu-table-body');
+                tbody.innerHTML = items.map(item => `
+                    <tr>
+                        <td>${item.item_name}</td>
+                        <td><input type="number" step="0.01" id="price-${item.id}" class="admin-input" value="${item.price.toFixed(2)}"></td>
+                        <td><input type="number" id="stock-${item.id}" class="admin-input" value="${item.stock}"></td>
+                        <td><button class="action-btn" onclick="commitMenuModifications(${item.id})">Update</button></td>
+                    </tr>
+                `).join('');
+            } catch (err) { console.error("Failed to query catalog schema.", err); }
+        }
+
+        async function executeTopUp(userId) {
+            const inputField = document.getElementById(`amt-${userId}`);
+            const amountValue = parseFloat(inputField.value);
+            if (isNaN(amountValue) || amountValue <= 0) {
+                alert("Please declare a positive numerical valuation.");
+                return;
+            }
+
+            const res = await fetch('/api/admin/topup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: userId, amount: amountValue })
+            });
+
+            if (res.ok) {
+                alert("Account balance top-up completed successfully.");
+                inputField.value = '';
+                loadUserDirectory();
+            } else { alert("Failed to commit financial adjustments."); }
+        }
+
+        async function commitMenuModifications(itemId) {
+            const priceVal = parseFloat(document.getElementById(`price-${itemId}`).value);
+            const stockVal = parseInt(document.getElementById(`stock-${itemId}`).value);
+
+            if (isNaN(priceVal) || priceVal < 0 || isNaN(stockVal) || stockVal < 0) {
+                alert("Valid non-negative parameters are mandatory.");
+                return;
+            }
+
+            const res = await fetch('/api/admin/update-item', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: itemId, price: priceVal, stock: stockVal })
+            });
+
+            if (res.ok) {
+                alert("Item configuration successfully saved.");
+                loadMenuControls();
+            } else { alert("Database update failed."); }
+        }
+
+        function logoutSecurely() {
+            localStorage.clear();
+            window.location.replace('/');
+        }
     </script>
 </body>
 </html>

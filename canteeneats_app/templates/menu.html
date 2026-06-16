@@ -7,22 +7,18 @@
     <link rel="stylesheet" href="/static/css/style.css">
     <title>Menu - CanteenEats</title>
     <style>
-        /* Workspace Branding */
         body { margin: 0; background-color: #ebc67e; display: flex; flex-direction: column; min-height: 100vh; font-family: Arial, sans-serif; }
         header { background-color: #046307; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid #111; }
         footer { background-color: #046307; color: white; padding: 15px; text-align: center; margin-top: auto; border-top: 4px solid #111; }
         
         nav { display: flex; align-items: center; }
-        nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; text-transform: uppercase; font-size: 14px; }
+        nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; text-transform: uppercase; font-size: 14px; cursor: pointer; }
         header a img { display: block; }
 
-        /* Balance Display Styling */
         .balance-badge { background-color: white; color: #046307; padding: 8px 15px; border-radius: 20px; font-weight: bold; margin-right: 20px; border: 2px solid #111; }
 
-        /* Main Layout */
         main { flex: 1; padding: 30px; display: flex; flex-direction: column; gap: 20px; max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box; }
 
-        /* --- Top Filter Bar --- */
         .filter-bar { 
             background: white; padding: 15px 20px; border: 3px solid #111; box-shadow: 6px 6px 0px #111; 
             display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
@@ -31,51 +27,40 @@
         .dietary-filters label { cursor: pointer; display: flex; align-items: center; gap: 5px; }
         .dietary-filters input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #046307; }
         
-        .search-box { 
-            padding: 10px; border: 2px solid #111; width: 300px; font-weight: bold; font-size: 14px;
-        }
+        .search-box { padding: 10px; border: 2px solid #111; width: 300px; font-weight: bold; font-size: 14px; }
 
-        /* --- Two-Column Layout --- */
         .menu-layout { display: flex; gap: 30px; align-items: flex-start; }
 
-        /* --- Sidebar --- */
-        .sidebar { 
-            width: 240px; background: white; border: 3px solid #111; box-shadow: 6px 6px 0px #111; padding: 20px 0; flex-shrink: 0;
-        }
+        .sidebar { width: 240px; background: white; border: 3px solid #111; box-shadow: 6px 6px 0px #111; padding: 20px 0; flex-shrink: 0; }
         .sidebar h3 { margin: 0 0 15px 20px; text-transform: uppercase; font-family: "Arial Black", sans-serif; }
         .category-list { list-style: none; padding: 0; margin: 0; }
-        .category-list li { 
-            padding: 12px 20px; font-weight: bold; cursor: pointer; border-left: 5px solid transparent; transition: 0.2s;
-        }
+        .category-list li { padding: 12px 20px; font-weight: bold; cursor: pointer; border-left: 5px solid transparent; transition: 0.2s; }
         .category-list li:hover { background-color: #f0f0f0; border-left: 5px solid #111; }
         .category-list li.active { background-color: #046307; color: white; border-left: 5px solid #111; }
 
-        /* --- Grid Content --- */
         .content-area { flex: 1; }
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         
-        .menu-item { 
-            border: 3px solid #111; padding: 15px; background: white; box-shadow: 4px 4px 0px #111; display: flex; flex-direction: column;
-        }
+        .menu-item { border: 3px solid #111; padding: 15px; background: white; box-shadow: 4px 4px 0px #111; display: flex; flex-direction: column; }
         .menu-item h3 { margin-top: 0; margin-bottom: 10px; font-size: 18px; }
-        .menu-item .price { font-weight: bold; color: #046307; font-size: 16px; margin-bottom: 15px; }
-        .menu-item button { 
-            background: #111; color: white; border: none; padding: 10px; font-weight: bold; cursor: pointer; margin-top: auto; text-transform: uppercase;
-        }
+        .menu-item .price { font-weight: bold; color: #046307; font-size: 16px; margin-bottom: 5px; }
+        .menu-item .stock-info { font-size: 13px; font-weight: bold; margin-bottom: 15px; color: #666; }
+        .menu-item .out-of-stock-text { color: #d9534f; }
+        
+        .menu-item button { background: #111; color: white; border: none; padding: 10px; font-weight: bold; cursor: pointer; margin-top: auto; text-transform: uppercase; }
         .menu-item button:hover { background: #046307; }
+        .menu-item button:disabled { background: #ccc; color: #666; cursor: not-allowed; border: 1px solid #ccc; }
         
         .empty-message { font-weight: bold; font-size: 18px; color: #111; grid-column: 1 / -1; }
     </style>
 </head>
 <body>
     <header>
-        <a href="/menu"><img src="/static/images/logo.png" alt="Logo" style="height: 50px;"></a>
+        <a id="logo-link" href="#"><img src="/static/images/logo.png" alt="Logo" style="height: 50px;"></a>
         <nav>
-            <div class="balance-badge" id="nav-balance">Balance: $12.00</div>
-            <a href="/menu">Menu</a>
-            <a href="/my_orders">My Orders</a>
-            <a href="/about">About Us</a>
-            <a href="/">Logout</a>
+            <div class="balance-badge" id="nav-balance">Balance: $0.00</div>
+            <div id="nav-links-container" style="display: inline-flex; align-items: center;"></div>
+            <a onclick="logoutSecurely()">Logout</a>
         </nav>
     </header>
 
@@ -91,157 +76,173 @@
         </div>
 
         <div class="menu-layout">
-            
             <aside class="sidebar">
                 <h3>Categories</h3>
                 <ul class="category-list" id="category-list">
                     <li class="active">All</li>
-                    <li>Sandwiches</li>
-                    <li>Wraps</li>
-                    <li>Drinks</li>
-                    <li>Salads</li>
-                    <li>Turkish Rolls</li>
-                    <li>Rice & Pasta</li>
-                    <li>Sushi</li>
-                    <li>Breakfast</li>
-                    <li>Pastries</li>
-                    <li>Snacks</li>
-                    <li>Loaded Subs</li>
-                    <li>Toasted Wraps</li>
-                    <li>Nachos</li>
-                    <li>Hot Bites</li>
-                    <li>Burgers</li>
-                    <li>Doner Kebabs</li>
+                    <li>Sandwiches</li><li>Wraps</li><li>Drinks</li><li>Salads</li>
+                    <li>Turkish Rolls</li><li>Rice & Pasta</li><li>Sushi</li><li>Breakfast</li>
+                    <li>Pastries</li><li>Snacks</li><li>Loaded Subs</li><li>Toasted Wraps</li>
+                    <li>Nachos</li><li>Hot Bites</li><li>Burgers</li><li>Doner Kebabs</li>
                 </ul>
             </aside>
 
             <section class="content-area">
-                <div class="menu-grid" id="grid">
-                    </div>
+                <div class="menu-grid" id="grid"></div>
             </section>
-
         </div>
     </main>
 
     <footer><p>&copy; 2026 CanteenEats System</p></footer>
 
     <script>
-      let allProducts = []; 
-      let currentCategory = 'All';
+        let allProducts = []; 
+        let currentCategory = 'All';
+        const role = localStorage.getItem('userRole') || 'Student';
 
-      // 1. Fetch data from SQLite Express Route
-      async function loadMenu() {
-        try {
-          const response = await fetch("/api/menu-items");
-          allProducts = await response.json();
-          applyFilters(); 
-        } catch (error) { 
-            console.error("Fetch error:", error); 
-            document.getElementById("grid").innerHTML = `<p style="color: red; font-weight: bold;">Error loading menu: ${error.message}</p>`;
+        // Role Redirect and Nav Generation
+        function setupNavigation() {
+            const navContainer = document.getElementById('nav-links-container');
+            const logoLink = document.getElementById('logo-link');
+            
+            if (role === 'Administrator') {
+                logoLink.href = '/edit_account';
+                navContainer.innerHTML = `<a href="/edit_account">Admin Panel</a><a href="/about">About Us</a>`;
+                document.getElementById('nav-balance').style.display = 'none';
+            } else if (role === 'Staff') {
+                logoLink.href = '/manage_orders';
+                navContainer.innerHTML = `<a href="/manage_orders">Kitchen Dashboard</a><a href="/about">About Us</a>`;
+                document.getElementById('nav-balance').style.display = 'none';
+            } else {
+                logoLink.href = '/menu';
+                navContainer.innerHTML = `<a href="/menu">Menu</a><a href="/my_orders">My Orders</a><a href="/about">About Us</a>`;
+            }
         }
-      }
-      
-      // 2. Render HTML Grid
-      function renderGrid(productsToDisplay) {
-          const grid = document.getElementById("grid");
-          
-          if (productsToDisplay.length === 0) {
-              grid.innerHTML = '<p class="empty-message">No items match your filters.</p>';
-              return;
-          }
 
-          grid.innerHTML = productsToDisplay.map(item => `
-            <div class="menu-item">
-              <h3>${item.item_name}</h3>
-              <p class="price">$${item.price.toFixed(2)}</p>
-              <button onclick="addToCart(${item.id})">Add to Cart</button>
-            </div>
-          `).join('');
-      }
+        async function loadMenu() {
+            try {
+                const response = await fetch("/api/menu-items");
+                allProducts = await response.json();
+                applyFilters(); 
+            } catch (error) { 
+                console.error("Fetch error:", error); 
+                document.getElementById("grid").innerHTML = `<p style="color: red; font-weight: bold;">Error loading menu: ${error.message}</p>`;
+            }
+        }
+        
+        function renderGrid(productsToDisplay) {
+            const grid = document.getElementById("grid");
+            if (productsToDisplay.length === 0) {
+                grid.innerHTML = '<p class="empty-message">No items match your filters.</p>';
+                return;
+            }
 
-      // 3. Unified Filtering Logic
-      function applyFilters() {
-          let filtered = allProducts;
+            grid.innerHTML = productsToDisplay.map(item => {
+                const isOutOfStock = item.stock <= 0;
+                return `
+                    <div class="menu-item">
+                        <h3>${item.item_name}</h3>
+                        <p class="price">$${item.price.toFixed(2)}</p>
+                        <p class="stock-info ${isOutOfStock ? 'out-of-stock-text' : ''}">
+                            ${isOutOfStock ? 'OUT OF STOCK' : `Stock: ${item.stock}`}
+                        </p>
+                        <button onclick="addToCart(${item.id})" ${isOutOfStock ? 'disabled' : ''}>
+                            ${isOutOfStock ? 'Unavailable' : 'Add to Cart'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
 
-          if (currentCategory !== 'All') {
-              filtered = filtered.filter(p => p.category === currentCategory);
-          }
+        function applyFilters() {
+            let filtered = allProducts;
+            if (currentCategory !== 'All') {
+                filtered = filtered.filter(p => p.category === currentCategory);
+            }
 
-          const searchTerm = document.getElementById('search-input').value.toLowerCase();
-          if (searchTerm) {
-              filtered = filtered.filter(p => p.item_name.toLowerCase().includes(searchTerm));
-          }
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            if (searchTerm) {
+                filtered = filtered.filter(p => p.item_name.toLowerCase().includes(searchTerm));
+            }
 
-          const isVeg = document.getElementById('filter-veg').checked;
-          const isGF = document.getElementById('filter-gf').checked;
-          const isOccasional = document.getElementById('filter-occ').checked;
-          const isEveryday = document.getElementById('filter-every').checked;
+            const isVeg = document.getElementById('filter-veg').checked;
+            const isGF = document.getElementById('filter-gf').checked;
+            const isOccasional = document.getElementById('filter-occ').checked;
+            const isEveryday = document.getElementById('filter-every').checked;
 
-          if (isVeg) filtered = filtered.filter(p => p.is_vegetarian === 1);
-          if (isGF) filtered = filtered.filter(p => p.is_gluten_free === 1);
-          if (isOccasional) filtered = filtered.filter(p => p.is_occasional_items === 1);
-          if (isEveryday) filtered = filtered.filter(p => p.is_everyday_items === 1);
+            if (isVeg) filtered = filtered.filter(p => p.is_vegetarian === 1);
+            if (isGF) filtered = filtered.filter(p => p.is_gluten_free === 1);
+            if (isOccasional) filtered = filtered.filter(p => p.is_occasional_items === 1);
+            if (isEveryday) filtered = filtered.filter(p => p.is_everyday_items === 1);
 
-          renderGrid(filtered);
-      }
+            renderGrid(filtered);
+        }
 
-      // 4. Cart Logic & Redirection
-      function addToCart(itemId) {
-          const itemToAdd = allProducts.find(p => p.id === itemId);
-          if (!itemToAdd) return;
+        function addToCart(itemId) {
+            if (role !== 'Student') {
+                alert("Only students can compile live retail carts.");
+                return;
+            }
+            const itemToAdd = allProducts.find(p => p.id === itemId);
+            if (!itemToAdd || itemToAdd.stock <= 0) return;
 
-          let cart = JSON.parse(localStorage.getItem('canteenCart')) || [];
-          
-          const existingItem = cart.find(cartItem => cartItem.id === itemId);
-          if (existingItem) {
-              existingItem.quantity += 1;
-          } else {
-              cart.push({
-                  id: itemToAdd.id,
-                  item_name: itemToAdd.item_name,
-                  price: itemToAdd.price,
-                  quantity: 1
-              });
-          }
+            let cart = JSON.parse(localStorage.getItem('canteenCart')) || [];
+            const existingItem = cart.find(cartItem => cartItem.id === itemId);
+            
+            if (existingItem) {
+                if (existingItem.quantity >= itemToAdd.stock) {
+                    alert("Cannot add more items than available in stock.");
+                    return;
+                }
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: itemToAdd.id,
+                    item_name: itemToAdd.item_name,
+                    price: itemToAdd.price,
+                    quantity: 1
+                });
+            }
 
-          localStorage.setItem('canteenCart', JSON.stringify(cart));
-          alert(`${itemToAdd.item_name} added to cart!`);
-          
-          // Redirect to orders page immediately
-          window.location.href = '/my_orders';
-      }
+            localStorage.setItem('canteenCart', JSON.stringify(cart));
+            alert(`${itemToAdd.item_name} added to cart!`);
+            window.location.href = '/my_orders';
+        }
 
-      // --- EVENT LISTENERS ---
-      const categoryItems = document.querySelectorAll('.category-list li');
-      categoryItems.forEach(item => {
-          item.addEventListener('click', () => {
-              categoryItems.forEach(i => i.classList.remove('active'));
-              item.classList.add('active');
-              currentCategory = item.innerText;
-              applyFilters();
-          });
-      });
+        const categoryItems = document.querySelectorAll('.category-list li');
+        categoryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                categoryItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                currentCategory = item.innerText;
+                applyFilters();
+            });
+        });
 
-      document.getElementById('search-input').addEventListener('input', applyFilters);
-      document.getElementById('filter-veg').addEventListener('change', applyFilters);
-      document.getElementById('filter-gf').addEventListener('change', applyFilters);
-      document.getElementById('filter-occ').addEventListener('change', applyFilters);
-      document.getElementById('filter-every').addEventListener('change', applyFilters);
+        document.getElementById('search-input').addEventListener('input', applyFilters);
+        document.getElementById('filter-veg').addEventListener('change', applyFilters);
+        document.getElementById('filter-gf').addEventListener('change', applyFilters);
+        document.getElementById('filter-occ').addEventListener('change', applyFilters);
+        document.getElementById('filter-every').addEventListener('change', applyFilters);
 
-      // --- INITIALIZE BALANCE ---
-      function loadBalance() {
-          let currentBalance = parseFloat(localStorage.getItem('studentBalance'));
-          // If no balance exists yet, start them with $12.00
-          if (isNaN(currentBalance)) {
-              currentBalance = 12.00;
-              localStorage.setItem('studentBalance', currentBalance.toFixed(2));
-          }
-          document.getElementById('nav-balance').innerText = `Balance: $${currentBalance.toFixed(2)}`;
-      }
+        function loadBalance() {
+            if (role !== 'Student') return;
+            let currentBalance = parseFloat(localStorage.getItem('studentBalance'));
+            if (isNaN(currentBalance)) {
+                currentBalance = 12.00;
+                localStorage.setItem('studentBalance', currentBalance.toFixed(2));
+            }
+            document.getElementById('nav-balance').innerText = `Balance: $${currentBalance.toFixed(2)}`;
+        }
 
-      // Load data and balance on startup
-      loadBalance();
-      loadMenu();
+        function logoutSecurely() {
+            localStorage.clear();
+            window.location.replace('/');
+        }
+
+        setupNavigation();
+        loadBalance();
+        loadMenu();
     </script>
 </body>
 </html>
