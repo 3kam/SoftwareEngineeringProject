@@ -52,14 +52,12 @@ The application follows an **Input–Process–Output (IPO)** model:
 To run this application locally, ensure you have [Node.js](https://nodejs.org/) installed:
 
 ```bash
-# 1. Clone the repository
-git clone <your-repository-url>
 
-# 2. Navigate to the project root
+# 1. Navigate to the project root
 cd canteeneats_app
 
-# 3. Install dependencies
+# 2. Install dependencies
 npm install
 
-# 4. Launch the server
+# 3. Launch the server
 node index.js
