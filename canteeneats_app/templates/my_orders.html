@@ -168,7 +168,7 @@
             const absoluteMinutes = (currentHour * 60) + currentMinute;
 
             const windowStart = (7 * 60) + 50; // 7:50 AM -> 470 minutes
-            const windowEnd = (13 * 60) + 38;  // 1:38 PM -> 818 minutes
+            const windowEnd = (21 * 60) + 38;  // 9:38 PM -> 1358 minutes
 
             if (dayOfWeek === 0 || dayOfWeek === 6 || absoluteMinutes < windowStart || absoluteMinutes > windowEnd) {
                 alert("Transaction Blocked: Canteen layout portal operates exclusively Monday to Friday between 7:50 AM and 1:38 PM.");
