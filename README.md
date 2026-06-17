@@ -1,111 +1,61 @@
 # CanteenEats – SMSHS Canteen Ordering System
-enter through this website
-https://curly-succotash-r4x6v7qvj5rrhx6x5-3000.app.github.dev/
+
+CanteenEats is a Node.js-based Progressive Web Application (PWA) designed to optimize the food ordering process at St Marys Senior High School (SMSHS).
+---
+## Installation & Deployment
+To run this application locally, ensure you have [Node.js](https://nodejs.org/) installed:
+Note: The script will attempt to auto-detect and install Node.js in your terminal. If Node.js is automatically detected and installed, proceed to Step 1 then Step 3. If it is not detected, follow the initial prompt to start over.
+```bash
+
+# 1. Navigate to the project root
+cd canteeneats_app
+
+# 2. Install dependencies
+npm install
+
+# 3. Launch the server
+node index.js
+```
 ---
 
-## Project Overview
-CanteenEats is a Node.js-based Progressive Web Application (PWA) built using the Express framework. It is designed to optimise the food ordering process at St Marys Senior High School (SMSHS). The system removes physical queue congestion by enabling students to pre-order meals, manage prepaid credit, and track order status in real time.
+## Authentication Credentials
+For testing and verification, use the following roles:
 
----
-
-## Problem Definition
-The SMSHS canteen services up to 800 students daily, resulting in:
-- Long queue times during recess and lunch  
-- Inefficient order management for staff  
-- Reduced eating time for students  
-
-This system addresses these issues through automation, digital balancing systems, and real-time order tracking.
-
----
-
-## Objectives
-- Reduce physical queue congestion outside the canteen windows  
-- Provide transparent real-time order tracking for students  
-- Improve staff kitchen workflow efficiency through digital dashboards  
-- Implement secure prepaid account management to minimize cash handling  
-
----
-
-## Target Users
-- **Students** – Place and track personal orders  
-- **Staff** – Manage menu item states and update cooking queues  
-- **Admin** – Manage user accounts, balances, and system configuration  
+| Role | Username | Password |
+| :--- | :--- | :--- |
+| **Administrator** | `admin` | `admin123` |
+| **Canteen Staff** | `canteenstaff` | `staff123` |
 
 ---
 
-## Core Features
-
-### Student Features
-- Browse live menu with filters (price, dietary requirements, availability)  
-- Place orders using prepaid account credit  
-- Select specific pickup windows (Recess or Lunch)  
-- Track order status in real time (Received → Preparing → Ready)  
-- View personal order history logs  
-- Manage account security details  
-
-### Staff Features
-- Add, edit, and toggle menu items (including image paths)  
-- View and update order processing statuses  
-- Cancel incoming orders and issue immediate account balance refunds  
-- Promote basic user accounts to staff access roles  
-- Top up student prepaid credit balances manually  
-- Access an active preparation dashboard  
+## 📋 Project Overview
+The SMSHS canteen services up to 800 students daily. This system removes physical queue congestion by enabling:
+* **Student Pre-ordering:** Order from mobile devices.
+* **Real-time Tracking:** Status updates (Received → Preparing → Ready).
+* **Efficiency:** Automated staff dashboards for kitchen management.
+* **Security:** Digital balance management to minimize cash handling.
 
 ---
 
 ## System Architecture
+The application follows an **Input–Process–Output (IPO)** model:
 
-### Input–Process–Output Model
+* **Input:** User credentials, menu selections, and checkout authorizations.
+* **Process:** Role-based access control (RBAC), stock validation, and relational database updates (SQLite).
+* **Output:** Order tracking, balance updates, and kitchen preparation queues.
 
-#### Input
-- User login credentials (Username/Password matching blocks)  
-- Menu selections and custom parameters  
-- Filter and sorting preferences  
-- Checkout and payment balance authorizations  
 
-#### Process
-- Role-based access control (RBAC) verification via session middleware  
-- Credit account balance validation  
-- Order verification and ingredient/stock checks  
-- Relational database updates via SQL queries  
 
-#### Output
-- Live order confirmation signals  
-- Dynamically updated user account balance records  
-- Real-time order status tracking elements  
-- Aggregated staff preparation queues  
+[Image of client server architecture with database]
+
 
 ---
 
 ## Technical Stack
-- **Backend Runtime Environment:** Node.js (JavaScript)  
-- **Server Framework:** Express (v5.x)  
-- **Database Engine:** SQLite (Relational SQL file)  
-- **Frontend Architecture:** Clean HTML, CSS, JavaScript (PWA Service Workers for offline shells)  
-- **Version Control System:** Git (GitHub Codespaces cloud deployment configuration)  
-
-### Security Layers
-- Production-ready password hashing  
-- Session-state isolation using explicit middleware  
-- Route protection checking parameters across user role flags  
+* **Runtime:** Node.js
+* **Framework:** Express (v5.x)
+* **Database:** SQLite
+* **Frontend:** HTML5, CSS3, JavaScript (PWA Service Workers)
 
 ---
 
-## Non-Functional Requirements
-- **Security:** Strict data separation ensuring users cannot interact with other profiles  
-- **Performance:** Fast response boundaries to support bulk connections during school bells  
-- **Usability:** High-contrast layout designed for quick smartphone use while on school grounds  
-- **Reliability:** Persistent local file storage handling sudden disconnections without dropping active cart state  
-
----
-## Installation & Deployment
-
-```bash
-# Navigate to your application root directory
-cd canteeneats_app
-
-# Install required backend dependencies
-npm install
-
-# Launch the server instance
-node index.js
