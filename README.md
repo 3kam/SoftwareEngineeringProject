@@ -1,7 +1,21 @@
 # CanteenEats – SMSHS Canteen Ordering System
 
 CanteenEats is a Node.js-based Progressive Web Application (PWA) designed to optimize the food ordering process at St Marys Senior High School (SMSHS).
+---
+## Installation & Deployment
+To run this application locally, ensure you have [Node.js](https://nodejs.org/) installed:
+Note: The script will attempt to auto-detect and install Node.js in your terminal. If Node.js is automatically detected and installed, proceed to Step 1 then Step 3. If it is not detected, follow the initial prompt to start over.
+```bash
 
+# 1. Navigate to the project root
+cd canteeneats_app
+
+# 2. Install dependencies
+npm install
+
+# 3. Launch the server
+node index.js
+```
 ---
 
 ## Authentication Credentials
@@ -45,16 +59,3 @@ The application follows an **Input–Process–Output (IPO)** model:
 
 ---
 
-## Installation & Deployment
-To run this application locally, ensure you have [Node.js](https://nodejs.org/) installed:
-
-```bash
-
-# 1. Navigate to the project root
-cd canteeneats_app
-
-# 2. Install dependencies
-npm install
-
-# 3. Launch the server
-node index.js
