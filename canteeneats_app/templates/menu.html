@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/css/style.css">
     <title>Menu - CanteenEats</title>
     <style>
+        /* Base page styling to ensure full height and standard spacing */
         body { margin: 0; background-color: #ebc67e; display: flex; flex-direction: column; min-height: 100vh; font-family: Arial, sans-serif; }
         header { background-color: #046307; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid #111; }
         footer { background-color: #046307; color: white; padding: 15px; text-align: center; margin-top: auto; border-top: 4px solid #111; }
@@ -15,10 +16,12 @@
         nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; text-transform: uppercase; font-size: 14px; cursor: pointer; }
         header a img { display: block; }
 
+        /* Badge for displaying the user's available funds */
         .balance-badge { background-color: white; color: #046307; padding: 8px 15px; border-radius: 20px; font-weight: bold; margin-right: 20px; border: 2px solid #111; }
 
         main { flex: 1; padding: 30px; display: flex; flex-direction: column; gap: 20px; max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box; }
 
+        /* Filtering bar container styling */
         .filter-bar { 
             background: white; padding: 15px 20px; border: 3px solid #111; box-shadow: 6px 6px 0px #111; 
             display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
@@ -31,6 +34,7 @@
 
         .menu-layout { display: flex; gap: 30px; align-items: flex-start; }
 
+        /* Sidebar category navigation */
         .sidebar { width: 240px; background: white; border: 3px solid #111; box-shadow: 6px 6px 0px #111; padding: 20px 0; flex-shrink: 0; }
         .sidebar h3 { margin: 0 0 15px 20px; text-transform: uppercase; font-family: "Arial Black", sans-serif; }
         .category-list { list-style: none; padding: 0; margin: 0; }
@@ -41,6 +45,7 @@
         .content-area { flex: 1; }
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         
+        /* Individual menu card styling */
         .menu-item { border: 3px solid #111; padding: 15px; background: white; box-shadow: 4px 4px 0px #111; display: flex; flex-direction: column; }
         .menu-item h3 { margin-top: 0; margin-bottom: 10px; font-size: 18px; }
         .menu-item .price { font-weight: bold; color: #046307; font-size: 16px; margin-bottom: 5px; }
@@ -96,11 +101,15 @@
     <footer><p>&copy; 2026 CanteenEats System</p></footer>
 
     <script>
+        // Initialise state variables
         let allProducts = []; 
         let currentCategory = 'All';
         const role = localStorage.getItem('userRole') || 'Student';
 
-        // Role Redirect and Nav Generation
+        /**
+         * Determines the navigation links to display based on the user's role.
+         * Redirects administrators, staff, and students to their appropriate landing pages.
+         */
         function setupNavigation() {
             const navContainer = document.getElementById('nav-links-container');
             const logoLink = document.getElementById('logo-link');
@@ -119,6 +128,7 @@
             }
         }
 
+        // Fetches the latest menu items from the backend API
         async function loadMenu() {
             try {
                 const response = await fetch("/api/menu-items");
@@ -130,6 +140,7 @@
             }
         }
         
+        // Updates the HTML grid with filtered product data
         function renderGrid(productsToDisplay) {
             const grid = document.getElementById("grid");
             if (productsToDisplay.length === 0) {
@@ -154,6 +165,7 @@
             }).join('');
         }
 
+        // Applies category, search, and dietary criteria to the product list
         function applyFilters() {
             let filtered = allProducts;
             if (currentCategory !== 'All') {
@@ -178,6 +190,7 @@
             renderGrid(filtered);
         }
 
+        // Manages adding items to the user's local cart
         function addToCart(itemId) {
             if (role !== 'Student') {
                 alert("Only students can compile live retail carts.");
@@ -209,6 +222,7 @@
             window.location.href = '/my_orders';
         }
 
+        // Set up event listeners for sidebar category clicks
         const categoryItems = document.querySelectorAll('.category-list li');
         categoryItems.forEach(item => {
             item.addEventListener('click', () => {
@@ -219,12 +233,14 @@
             });
         });
 
+        // Event listeners for filters and search bar
         document.getElementById('search-input').addEventListener('input', applyFilters);
         document.getElementById('filter-veg').addEventListener('change', applyFilters);
         document.getElementById('filter-gf').addEventListener('change', applyFilters);
         document.getElementById('filter-occ').addEventListener('change', applyFilters);
         document.getElementById('filter-every').addEventListener('change', applyFilters);
 
+        // Retrieves and displays the user's current account balance
         function loadBalance() {
             if (role !== 'Student') return;
             let currentBalance = parseFloat(localStorage.getItem('studentBalance'));
@@ -235,11 +251,13 @@
             document.getElementById('nav-balance').innerText = `Balance: $${currentBalance.toFixed(2)}`;
         }
 
+        // Clears storage and redirects to the login page securely
         function logoutSecurely() {
             localStorage.clear();
             window.location.replace('/');
         }
 
+        // Initialise app components on page load
         setupNavigation();
         loadBalance();
         loadMenu();
