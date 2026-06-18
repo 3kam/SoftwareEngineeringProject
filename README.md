@@ -30,7 +30,7 @@ For testing and verification, use the following roles:
 
 ## 📋 Project Overview
 The SMSHS canteen services up to 800 students daily. This system removes physical queue congestion by enabling:
-* **Student Pre-ordering:** Order from mobile devices.
+* **Student Pre-ordering:** Order from own devices.
 * **Real-time Tracking:** Status updates (Received → Preparing → Ready).
 * **Efficiency:** Automated staff dashboards for kitchen management.
 * **Security:** Digital balance management to minimize cash handling.
