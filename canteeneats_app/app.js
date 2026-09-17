@@ -25,7 +25,7 @@ const db = new sqlite3.Database(dbPath, async (err) => {
         console.error("Database connection error:", err.message);
     } else {
         console.log("Connected to the SQLite database successfully.");
-        
+
         // --- DEVELOPER PASSWORD RESETTER ---
         // This converts your old database scrypt hashes into bcrypt hashes automatically
         try {
@@ -65,7 +65,7 @@ app.get("/my_orders", (req, res) => res.sendFile(path.join(__dirname, "templates
 // Registration API
 app.post("/api/auth/register", async (req, res) => {
     const { username, password } = req.body;
-    
+
     if (!username || !password) {
         return res.status(400).json({ error: "Username and password are required." });
     }
@@ -110,11 +110,11 @@ app.post("/api/auth/login", (req, res) => {
             if (isMatch) {
                 console.log(`[LOGIN] Successful authentication for: ${username}`);
                 // Return user metrics to frontend so it can populate localStorage sessions properly
-                res.json({ 
-                    id: user.user_id, 
-                    username: user.username, 
-                    role: user.role, 
-                    balance: user.prepaid_balance 
+                res.json({
+                    id: user.user_id,
+                    username: user.username,
+                    role: user.role,
+                    balance: user.prepaid_balance
                 });
             } else {
                 res.status(400).json({ error: "Incorrect password." });

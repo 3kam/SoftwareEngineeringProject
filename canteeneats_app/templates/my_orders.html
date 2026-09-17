@@ -1,43 +1,179 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/static/images/favicon.png" type="image/png">
     <link rel="stylesheet" href="/static/css/style.css" />
     <title>My Orders & Cart - CanteenEats</title>
     <style>
-        body { margin: 0; background-color: #ebc67e; display: flex; flex-direction: column; min-height: 100vh; font-family: Arial, sans-serif; }
-        header { background-color: #046307; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid #111; }
-        nav { display: flex; align-items: center; }
-        nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; text-transform: uppercase; font-size: 14px; cursor: pointer; }
-        
-        .balance-badge { background-color: white; color: #046307; padding: 8px 15px; border-radius: 20px; font-weight: bold; margin-right: 20px; border: 2px solid #111; }
+        body {
+            margin: 0;
+            background-color: #ebc67e;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
 
-        main { flex: 1; padding: 40px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
-        .order-card { background: white; padding: 30px; width: 100%; max-width: 900px; border: 3px solid #111; box-shadow: 8px 8px 0px #111; box-sizing: border-box; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 2px solid #eee; }
-        th { font-family: "Arial Black", sans-serif; text-transform: uppercase; }
-        
-        .search-input { width: 100%; padding: 12px; margin-bottom: 20px; border: 2px solid #111; box-sizing: border-box; }
-        header a img { display: block; }
+        header {
+            background-color: #046307;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #111;
+        }
 
-        .remove-btn { background: #d9534f; color: white; border: 2px solid #111; padding: 5px 12px; cursor: pointer; font-weight: bold; border-radius: 4px; }
-        .remove-btn:hover { background: #c9302c; }
-        .checkout-row { background: #f9f9f9; font-weight: bold; font-size: 18px; }
-        
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .balance-badge {
+            background-color: white;
+            color: #046307;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-right: 20px;
+            border: 2px solid #111;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .order-card {
+            background: white;
+            padding: 30px;
+            width: 100%;
+            max-width: 900px;
+            border: 3px solid #111;
+            box-shadow: 8px 8px 0px #111;
+            box-sizing: border-box;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid #eee;
+        }
+
+        th {
+            font-family: "Arial Black", sans-serif;
+            text-transform: uppercase;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #111;
+            box-sizing: border-box;
+        }
+
+        header a img {
+            display: block;
+        }
+
+        .remove-btn {
+            background: #d9534f;
+            color: white;
+            border: 2px solid #111;
+            padding: 5px 12px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .remove-btn:hover {
+            background: #c9302c;
+        }
+
+        .checkout-row {
+            background: #f9f9f9;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
         /* Period Selector Box */
-        .period-box { margin-top: 20px; padding: 15px; border: 2px dashed #111; background-color: #fafafa; }
-        .period-box h4 { margin-top: 0; text-transform: uppercase; font-family: "Arial Black", sans-serif; font-size: 14px; }
-        .options-group { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px; }
-        .options-group label { font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-        .options-group input[type="radio"] { accent-color: #046307; transform: scale(1.2); }
+        .period-box {
+            margin-top: 20px;
+            padding: 15px;
+            border: 2px dashed #111;
+            background-color: #fafafa;
+        }
 
-        .pay-btn { background: #046307; color: white; border: 2px solid #111; padding: 10px 20px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 16px; float: right; margin-top: 20px; }
-        .pay-btn:hover { background: #034f05; }
+        .period-box h4 {
+            margin-top: 0;
+            text-transform: uppercase;
+            font-family: "Arial Black", sans-serif;
+            font-size: 14px;
+        }
+
+        .options-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .options-group label {
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .options-group input[type="radio"] {
+            accent-color: #046307;
+            transform: scale(1.2);
+        }
+
+        .pay-btn {
+            background: #046307;
+            color: white;
+            border: 2px solid #111;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 16px;
+            float: right;
+            margin-top: 20px;
+        }
+
+        .pay-btn:hover {
+            background: #034f05;
+        }
     </style>
 </head>
+
 <body>
     <header>
         <a id="logo-link" href="#"><img src="/static/images/logo.png" alt="Logo" style="height: 50px" /></a>
@@ -81,14 +217,22 @@
             </div>
 
             <button class="pay-btn" onclick="processPayment()">Pay Now</button>
-            <div style="clear: both;"></div> 
+            <div style="clear: both;"></div>
         </div>
 
         <div class="order-card">
             <h2>My Order History</h2>
             <input type="text" class="search-input" placeholder="Search by product name..." />
             <table>
-                <thead><tr><th>Date</th><th>Order ID</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Order ID</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
                 <tbody id="order-body"></tbody>
             </table>
         </div>
@@ -115,7 +259,7 @@
         function loadPendingCart() {
             let cart = JSON.parse(localStorage.getItem('canteenCart')) || [];
             const cartBody = document.getElementById('cart-body');
-            
+
             if (cart.length === 0) {
                 cartBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Your cart is empty. Please visit the menu.</td></tr>';
                 document.getElementById('cart-total').innerText = '$0.00';
@@ -218,8 +362,8 @@
                 tbody.innerHTML = orders.map(o => `
                     <tr><td>${o.date}</td><td>${o.order_id}</td><td>${o.items}</td><td>$${parseFloat(o.total_price).toFixed(2)}</td><td><strong>${o.status}</strong></td></tr>
                 `).join("");
-            } catch (error) { 
-                console.error("Error loading orders:", error); 
+            } catch (error) {
+                console.error("Error loading orders:", error);
             }
         }
 
@@ -233,4 +377,5 @@
         loadOrderHistory();
     </script>
 </body>
+
 </html>

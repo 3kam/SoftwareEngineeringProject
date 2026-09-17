@@ -48,7 +48,7 @@ self.addEventListener('fetch', (event) => {
 
     // CRITICAL SECURITY BYPASS: Never cache database API queries, login or registration routes
     if (url.pathname.includes('/auth/') || url.pathname.includes('/api/')) {
-        return; 
+        return;
     }
 
     // STRATEGY: Network-First for HTML pages (navigation)

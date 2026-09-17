@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,8 +18,18 @@
             font-family: 'Arial Black', sans-serif;
             text-transform: uppercase;
         }
-        .landing-container h1 { font-size: 64px; letter-spacing: -2px; margin-bottom: 40px; }
-        .btn-group { display: flex; gap: 20px; }
+
+        .landing-container h1 {
+            font-size: 64px;
+            letter-spacing: -2px;
+            margin-bottom: 40px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+        }
+
         .btn-group button {
             padding: 15px 30px;
             font-family: 'Arial Black', sans-serif;
@@ -30,18 +41,23 @@
             box-shadow: 6px 6px 0px var(--border-dark);
             transition: transform 0.1s;
         }
-        .btn-group button:hover { transform: translate(-2px, -2px); }
+
+        .btn-group button:hover {
+            transform: translate(-2px, -2px);
+        }
     </style>
 </head>
+
 <body>
     <div class="landing-container">
         <img src="/static/images/logo.png" alt="Logo" style="height: 120px; margin-bottom: 20px;">
         <h1>CanteenEats</h1>
-        
+
         <div class="btn-group">
             <a href="/register"><button type="button">Sign up</button></a>
             <a href="/login"><button type="button">Login</button></a>
         </div>
     </div>
 </body>
+
 </html>
